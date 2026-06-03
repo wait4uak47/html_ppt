@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>唯品会 业务流程与业务改善机会分析</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --paper: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --head: #f3f6fa;
+      --yes: #11845b;
+      --yes-bg: #e7f6ef;
+      --yes-line: #9ad7bd;
+      --no: #b33d3d;
+      --no-bg: #fff0ed;
+      --no-line: #f0afa4;
+      --arrow: #63c891;
+      --arrow-line: #b9ecd2;
+      --arrow-bg: #edf9f3;
+      --link: #245dbd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 24px 56px;
+    }
+
+    .page-title {
+      margin: 0 0 20px;
+      padding: 24px 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 30px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      box-shadow: 0 12px 30px rgba(20, 32, 54, 0.08);
+    }
+
+    .business-section,
+    .summary-section {
+      margin-top: 18px;
+      padding: 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 12px 30px rgba(20, 32, 54, 0.08);
+    }
+
+    h1, h2 {
+      margin: 0;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .business-section h1,
+    .summary-section h1 {
+      font-size: 24px;
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 18px 0 12px;
+      letter-spacing: 0;
+    }
+
+    .matrix-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 8px 12px;
+      border-left: 5px solid var(--yes);
+      border-radius: 8px;
+      background: linear-gradient(90deg, #eef9f3 0%, #ffffff 72%);
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .matrix-title::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 99px;
+      background: var(--yes);
+    }
+
+    .doc-paragraph {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .flow-map {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfcfe;
+    }
+
+    .flow-stage {
+      position: relative;
+      display: grid;
+      grid-template-columns: 138px 1fr;
+      gap: 10px;
+      align-items: stretch;
+      padding: 10px;
+      border: 1px solid #bfcbe0;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .flow-stage.feedback-stage {
+      border-style: dashed;
+      background: #fffdf8;
+    }
+
+    .stage-label {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      padding: 8px;
+      border-radius: 8px;
+      background: var(--head);
+    }
+
+    .stage-label span {
+      width: fit-content;
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 6px;
+      color: #244c9a;
+      background: #dfe8f7;
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .stage-label strong {
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .stage-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      position: relative;
+      flex: 1 1 136px;
+      min-height: 72px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .node-connector {
+      flex: 0 0 36px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      pointer-events: none;
+    }
+
+    .node-connector::before {
+      content: "";
+      width: 22px;
+      height: 8px;
+      background: var(--arrow-line);
+      border-radius: 999px 0 0 999px;
+    }
+
+    .node-connector::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 14px solid var(--arrow);
+    }
+
+    .step-index {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 99px;
+      background: #244c9a;
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+      margin: 0 auto 6px;
+    }
+
+    .step-title {
+      font-size: 13px;
+      font-weight: 700;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .stage-connector {
+      width: 64px;
+      height: 42px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      margin: -5px 0;
+      pointer-events: none;
+    }
+
+    .stage-connector::before {
+      content: "";
+      width: 14px;
+      height: 20px;
+      background: var(--arrow-line);
+      border-radius: 999px 999px 0 0;
+    }
+
+    .stage-connector::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 22px solid transparent;
+      border-right: 22px solid transparent;
+      border-top: 18px solid var(--arrow);
+    }
+
+    .feedback-note {
+      grid-column: 2;
+      margin-top: -2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 10px 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 99px;
+      display: inline-block;
+    }
+
+    .legend-dot.yes { background: var(--yes); }
+    .legend-dot.no { background: var(--no); }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      overflow: visible;
+      padding-bottom: 8px;
+    }
+
+    .matrix-col {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      overflow: hidden;
+    }
+
+    .matrix-col header {
+      min-height: 62px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 8px;
+      align-items: start;
+      padding: 12px;
+      background: var(--head);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .matrix-col header span {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: #dfe8f7;
+      color: #244c9a;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .matrix-col header strong {
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .opportunity-list {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .op-card {
+      width: 100%;
+      min-height: 118px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .op-card.yes {
+      border: 1px solid var(--yes-line);
+      background: var(--yes-bg);
+      color: #123528;
+    }
+
+    .op-card.no {
+      border: 1px solid var(--no-line);
+      background: var(--no-bg);
+      color: #3d1e1b;
+    }
+
+    .op-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(20, 32, 54, 0.1);
+    }
+
+    .op-title {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .op-desc {
+      color: #4f5c70;
+      font-size: 12px;
+    }
+
+    .status {
+      justify-self: start;
+      align-self: end;
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .status.yes { color: var(--yes); background: rgba(17, 132, 91, 0.12); }
+    .status.no { color: var(--no); background: rgba(179, 61, 61, 0.12); }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      word-break: break-word;
+    }
+
+    th {
+      background: var(--head);
+      text-align: left;
+      font-weight: 700;
+    }
+
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+
+    .summary-table-wrap {
+      overflow-x: auto;
+    }
+
+    .summary-table-wrap table {
+      min-width: 900px;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(36, 93, 189, 0.28);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.42);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(760px, 100%);
+      max-height: min(82vh, 860px);
+      overflow: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 24px 68px rgba(15, 23, 42, 0.28);
+    }
+
+    .modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      padding: 18px 20px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-row:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    .detail-label {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 8px;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .chip.yes { color: var(--yes); background: var(--yes-bg); }
+    .chip.no { color: var(--no); background: var(--no-bg); }
+    @media (max-width: 780px) {
+      main { padding: 14px 12px 36px; }
+      .page-title,
+      .business-section,
+      .summary-section { padding: 18px 14px; }
+      .page-title { font-size: 24px; }
+      .business-section h1,
+      .summary-section h1 { font-size: 21px; }
+      .flow-stage { grid-template-columns: 1fr; }
+      .matrix { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .stage-nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .node-connector { display: none; }
+      .feedback-note { grid-column: 1; }
+      .detail-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="page-title">唯品会 业务流程与业务改善机会分析</h1>
+    <section class="business-section">
+    <h1>ToC 消费者业务</h1>
+    <h2 class="section-title flow-title">业务流程分析</h2>
+    <div class="flow-map"><section class="flow-stage ">
+        <div class="stage-label">
+          <span>上游</span>
+          <strong>获客与决策前链路</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">1</div>
+                <div class="step-title">用户触达 / 进入</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">2</div>
+                <div class="step-title">浏览 / 搜索 / 推荐</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">3</div>
+                <div class="step-title">商品详情 / 购买决策</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">4</div>
+                <div class="step-title">价格 / 优惠 / 会员权益</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>中游</span>
+          <strong>交易转化</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">5</div>
+                <div class="step-title">加购 / 下单 / 支付</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>下游</span>
+          <strong>履约与售后服务</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">6</div>
+                <div class="step-title">履约 / 物流</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">7</div>
+                <div class="step-title">售后 / 退换货</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>反馈回流</span>
+          <strong>VOC、复盘与复购</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">8</div>
+                <div class="step-title">客服 / VOC</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">9</div>
+                <div class="step-title">评价 / 体验复盘</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">10</div>
+                <div class="step-title">会员 / 复购</div>
+              </div>
+        </div>
+        
+      </section></div>
+    <h2 class="section-title matrix-title">业务改善机会映射表</h2>
+    <div class="doc-paragraph">飞书能覆盖的场景集中在：流程协同、数据沉淀、看板预警、任务闭环、AI 归因/总结</div>
+    <div class="legend">
+      <span><i class="legend-dot yes"></i>飞书是否能覆盖：能</span>
+      <span><i class="legend-dot no"></i>飞书是否能覆盖：不能</span>
+    </div>
+    <div class="matrix"><section class="matrix-col">
+        <header>
+          <span>1</span>
+          <strong>用户触达 / 进入</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To C-1">
+                <span class="op-title">精准触达</span>
+                <span class="op-desc">基于用户分层、消费阶段和活动偏好设计触达策略，减少无效曝光。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To C-2">
+                <span class="op-title">入口分流</span>
+                <span class="op-desc">根据活动目的把用户导向品牌特卖、频道、会场或搜索结果页，降低跳失。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-3">
+                <span class="op-title">人群分层</span>
+                <span class="op-desc">将新客、活跃、沉默、高价值、价格敏感等人群拆开运营。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-4">
+                <span class="op-title">阶段运营</span>
+                <span class="op-desc">针对拉新、首购、复购、沉默唤醒、流失挽回设计差异化动作。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>2</span>
+          <strong>浏览 / 搜索 / 推荐</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To C-5">
+                <span class="op-title">找货效率</span>
+                <span class="op-desc">优化搜索词、筛选条件、类目导航和结果排序，让用户更快找到目标商品。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To C-6">
+                <span class="op-title">个性推荐</span>
+                <span class="op-desc">根据偏好、浏览、购买、退货等行为提升推荐相关性。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To C-7">
+                <span class="op-title">库存感知</span>
+                <span class="op-desc">在浏览阶段提前体现尺码、区域库存、售罄风险，减少无效点击。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To C-8">
+                <span class="op-title">逛购惊喜</span>
+                <span class="op-desc">通过主题、品牌组合、折扣故事和内容化导购提升逛购兴趣。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>3</span>
+          <strong>商品详情 / 购买决策</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-9">
+                <span class="op-title">信任表达</span>
+                <span class="op-desc">用正品、品控、品牌授权、售后保障等信息强化决策信任。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-10">
+                <span class="op-title">信息补全</span>
+                <span class="op-desc">补齐尺码、材质、场景、洗护、适配人群等高频决策信息。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-11">
+                <span class="op-title">价格证明</span>
+                <span class="op-desc">明确折扣来源、历史价、到手价、优惠组成，降低价格疑虑。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-12">
+                <span class="op-title">评价结构化</span>
+                <span class="op-desc">将评价中的尺码、质量、物流、售后等要素拆解，帮助用户快速判断。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>4</span>
+          <strong>价格 / 优惠 / 会员权益</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To C-13">
+                <span class="op-title">优惠透明</span>
+                <span class="op-desc">把券、满减、会员价、平台补贴等到手价规则讲清楚，减少理解成本。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-14">
+                <span class="op-title">规则简化</span>
+                <span class="op-desc">识别过复杂的优惠门槛和叠加限制，降低用户决策负担。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To C-15">
+                <span class="op-title">权益感知</span>
+                <span class="op-desc">在关键节点提醒会员权益、专属券、退换保障、包邮或积分价值。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To C-16">
+                <span class="op-title">动态定价</span>
+                <span class="op-desc">根据库存、时效、竞争价格和用户敏感度调整折扣策略。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>5</span>
+          <strong>加购 / 下单 / 支付</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-17">
+                <span class="op-title">弃单归因</span>
+                <span class="op-desc">识别价格、库存、物流、支付、信任等导致加购未转化的原因。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-18">
+                <span class="op-title">链路监控</span>
+                <span class="op-desc">对加购、下单、支付、优惠使用等关键节点建立异常监控。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-19">
+                <span class="op-title">高值挽回</span>
+                <span class="op-desc">对高价值用户、临门一脚用户设计即时挽回动作。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To C-20">
+                <span class="op-title">结算确定性</span>
+                <span class="op-desc">在结算页提前明确配送、退换、税费、优惠可用性，减少最后一步流失。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>6</span>
+          <strong>履约 / 物流</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-21">
+                <span class="op-title">延迟预警</span>
+                <span class="op-desc">在订单可能延迟前提前识别、提醒并准备补偿方案。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-22">
+                <span class="op-title">异常看板</span>
+                <span class="op-desc">将缺货、拦截、退仓、破损、丢件等异常统一可视化。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To C-23">
+                <span class="op-title">拆单体验</span>
+                <span class="op-desc">对多仓、多包裹、多时效订单给出清晰解释和预期管理。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-24">
+                <span class="op-title">承诺一致</span>
+                <span class="op-desc">让页面承诺、客服口径、物流状态、售后政策保持一致。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>7</span>
+          <strong>售后 / 退换货</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-25">
+                <span class="op-title">退因资产化</span>
+                <span class="op-desc">将退货原因从单次处理沉淀为商品、尺码、质量、履约改进资产。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-26">
+                <span class="op-title">进度透明</span>
+                <span class="op-desc">让退款、退货、换货状态可视化，减少用户重复咨询。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-27">
+                <span class="op-title">逆向提效</span>
+                <span class="op-desc">优化取件、质检、入库、退款、换货各环节的内部协同。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-28">
+                <span class="op-title">高频监控</span>
+                <span class="op-desc">对高退货商品、同类投诉、异常店铺进行持续监控和干预。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>8</span>
+          <strong>客服 / VOC</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-29">
+                <span class="op-title">客服前哨</span>
+                <span class="op-desc">把客服从被动响应变成问题预警入口，提前识别集中爆发问题。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-30">
+                <span class="op-title">问题归因</span>
+                <span class="op-desc">将用户问题归因到商品、价格、物流、售后、页面信息或系统体验。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-31">
+                <span class="op-title">舆情预警</span>
+                <span class="op-desc">对差评、社媒反馈、客服高频词进行趋势识别和预警。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-32">
+                <span class="op-title">知识沉淀</span>
+                <span class="op-desc">把客服话术、问题处理、补偿规则沉淀为可复用知识库。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>9</span>
+          <strong>评价 / 体验复盘</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-33">
+                <span class="op-title">体验复盘</span>
+                <span class="op-desc">将大促、品类、品牌、履约和售后体验按周期复盘。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-34">
+                <span class="op-title">评价拆解</span>
+                <span class="op-desc">从评价中拆出尺码、质量、包装、客服、物流等结构化指标。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-35">
+                <span class="op-title">反馈入业务</span>
+                <span class="op-desc">将用户反馈自动流转给商品、运营、物流、技术等责任方。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-36">
+                <span class="op-title">正反复盘</span>
+                <span class="op-desc">对好评与差评都沉淀可复用做法，避免只处理负反馈。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>10</span>
+          <strong>会员 / 复购</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To C-37">
+                <span class="op-title">复购动因</span>
+                <span class="op-desc">找出复购来自价格、品牌偏好、上新频率、服务体验还是权益价值。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-38">
+                <span class="op-title">沉默诊断</span>
+                <span class="op-desc">识别用户沉默是因为价格、频次、品类不匹配、体验差还是触达疲劳。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-39">
+                <span class="op-title">会员健康度</span>
+                <span class="op-desc">把售后体验、物流体验、退款次数、客服满意度纳入会员健康评估。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To C-40">
+                <span class="op-title">高值保护</span>
+                <span class="op-desc">优先识别高价值用户的负面体验，避免一次差体验影响长期价值。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section></div>
+  </section>
+    <section class="business-section">
+    <h1>ToB 商家/品牌业务</h1>
+    <h2 class="section-title flow-title">业务流程分析</h2>
+    <div class="flow-map"><section class="flow-stage ">
+        <div class="stage-label">
+          <span>上游</span>
+          <strong>商家引入与准入</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">1</div>
+                <div class="step-title">品牌 / 商家招募</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">2</div>
+                <div class="step-title">准入 / 资质审核</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>中游</span>
+          <strong>货盘、商品与价格准备</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">3</div>
+                <div class="step-title">选品 / 货盘规划</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">4</div>
+                <div class="step-title">商品资料 / 上架</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">5</div>
+                <div class="step-title">价格 / 折扣管理</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>下游</span>
+          <strong>供应链、活动与经营监控</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">6</div>
+                <div class="step-title">供应链 / 备货入仓</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">7</div>
+                <div class="step-title">活动 / 资源排期</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">8</div>
+                <div class="step-title">经营 / 数据监控</div>
+              </div>
+        </div>
+        
+      </section><div class="stage-connector" aria-hidden="true"></div><section class="flow-stage ">
+        <div class="stage-label">
+          <span>反馈回流</span>
+          <strong>商家服务、结算与复盘</strong>
+        </div>
+        <div class="stage-nodes">
+          <div class="flow-step">
+                <div class="step-index">9</div>
+                <div class="step-title">售后 / 商家服务</div>
+              </div><div class="node-connector" aria-hidden="true"></div><div class="flow-step">
+                <div class="step-index">10</div>
+                <div class="step-title">对账 / 结算 / 复盘</div>
+              </div>
+        </div>
+        
+      </section></div>
+    <h2 class="section-title matrix-title">业务改善机会映射表</h2>
+    
+    <div class="legend">
+      <span><i class="legend-dot yes"></i>飞书是否能覆盖：能</span>
+      <span><i class="legend-dot no"></i>飞书是否能覆盖：不能</span>
+    </div>
+    <div class="matrix"><section class="matrix-col">
+        <header>
+          <span>1</span>
+          <strong>品牌 / 商家招募</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-1">
+                <span class="op-title">目标品牌分层</span>
+                <span class="op-desc">按品牌影响力、价格带、品类补位、供应能力、折扣空间识别优先招商对象。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-2">
+                <span class="op-title">招商线索沉淀</span>
+                <span class="op-desc">把展会、BD 拜访、老商家推荐、平台招商等线索统一沉淀，避免线索散落。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-3">
+                <span class="op-title">商机阶段管理</span>
+                <span class="op-desc">明确接触、意向、资质提交、合同推进、试运营等阶段，提升招商转化率。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-4">
+                <span class="op-title">品牌价值评估</span>
+                <span class="op-desc">不只看品牌知名度，也评估货盘稳定性、价格竞争力、退货风险和复购潜力。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>2</span>
+          <strong>准入 / 资质审核</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To B-5">
+                <span class="op-title">资质一次性补齐</span>
+                <span class="op-desc">提前明确营业执照、商标授权、质检报告、行业许可等资料清单，减少反复补件。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-6">
+                <span class="op-title">审核进度透明</span>
+                <span class="op-desc">让商家知道当前卡在哪个环节、谁在处理、预计何时完成，降低沟通成本。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-7">
+                <span class="op-title">风险前置识别</span>
+                <span class="op-desc">对假授权、资质过期、类目限制、历史违规、售后风险进行准入前筛查。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-8">
+                <span class="op-title">合同条款标准化</span>
+                <span class="op-desc">将扣点、账期、退货责任、活动义务、质保要求沉淀成标准条款和差异审批。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>3</span>
+          <strong>选品 / 货盘规划</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-9">
+                <span class="op-title">爆品识别</span>
+                <span class="op-desc">基于历史销售、平台人群、季节趋势和库存深度识别更适合特卖的商品。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-10">
+                <span class="op-title">货盘结构优化</span>
+                <span class="op-desc">平衡引流款、利润款、形象款、清仓款，避免货盘只靠低价驱动。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-11">
+                <span class="op-title">品类补位</span>
+                <span class="op-desc">发现平台在尺码、价格带、风格、季节、区域需求上的供给缺口。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-12">
+                <span class="op-title">上新节奏管理</span>
+                <span class="op-desc">结合大促、换季、库存周期和品牌供货计划，优化商品上新与返场节奏。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>4</span>
+          <strong>商品资料 / 上架</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To B-13">
+                <span class="op-title">商品信息完整度</span>
+                <span class="op-desc">提升标题、卖点、尺码、材质、成分、洗护、质保等信息的完整性。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-14">
+                <span class="op-title">素材质量管理</span>
+                <span class="op-desc">对主图、详情图、模特图、视频、品牌素材建立质量标准和审核流程。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-15">
+                <span class="op-title">上架异常预警</span>
+                <span class="op-desc">对缺图、缺规格、价格不一致、类目错挂、库存异常等问题提前预警。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-16">
+                <span class="op-title">信息复用</span>
+                <span class="op-desc">将品牌介绍、商品参数、尺码模板、售后说明等沉淀为可复用资产。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>5</span>
+          <strong>价格 / 折扣管理</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-17">
+                <span class="op-title">到手价校验</span>
+                <span class="op-desc">校验活动价、券后价、会员价、平台补贴后的最终价格是否准确。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-18">
+                <span class="op-title">价格竞争监控</span>
+                <span class="op-desc">对竞品平台价格、历史价、建议零售价和唯品会到手价进行持续对比。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-19">
+                <span class="op-title">折扣策略复盘</span>
+                <span class="op-desc">复盘不同折扣深度对转化、毛利、库存消化和品牌心智的影响。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-20">
+                <span class="op-title">价格异常闭环</span>
+                <span class="op-desc">对价格倒挂、低于授权底价、优惠叠加异常等情况建立快速处理机制。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>6</span>
+          <strong>供应链 / 备货入仓</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-21">
+                <span class="op-title">备货预测</span>
+                <span class="op-desc">根据活动目标、历史动销、尺码结构、退货率预测合理备货量。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-22">
+                <span class="op-title">来货计划协同</span>
+                <span class="op-desc">将预约、发货、到仓、质检、入库等节点统一管理，减少临期拥堵。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-23">
+                <span class="op-title">库存健康监控</span>
+                <span class="op-desc">对滞销、断码、缺货、超卖、库龄过长等库存问题建立监控。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-24">
+                <span class="op-title">异常责任定位</span>
+                <span class="op-desc">对迟到货、少发、错发、质检不通过、包装不合规等问题快速定位责任方。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>7</span>
+          <strong>活动 / 资源排期</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card yes" type="button" data-id="To B-25">
+                <span class="op-title">活动排期可视化</span>
+                <span class="op-desc">统一管理品牌活动、频道资源、大促会场、直播、站内资源位排期。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-26">
+                <span class="op-title">资源匹配效率</span>
+                <span class="op-desc">根据品牌等级、货盘质量、价格竞争力和目标人群匹配资源位。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-27">
+                <span class="op-title">活动准备清单</span>
+                <span class="op-desc">将货品、价格、库存、素材、客服口径、物流承诺等活动前检查项标准化。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-28">
+                <span class="op-title">大促协同机制</span>
+                <span class="op-desc">对大促期间的目标、战报、异常、补货、改价、售后问题建立作战机制。</span>
+                <span class="status yes">能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>8</span>
+          <strong>经营 / 数据监控</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-29">
+                <span class="op-title">商家经营看板</span>
+                <span class="op-desc">统一查看 GMV、转化率、客单价、退货率、库存周转、售后投诉等指标。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-30">
+                <span class="op-title">异常指标预警</span>
+                <span class="op-desc">对销量骤降、退货升高、库存不足、差评上升、履约延迟等情况自动预警。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-31">
+                <span class="op-title">商家健康度</span>
+                <span class="op-desc">从销售、供货、履约、售后、合规、协同响应等维度评估商家质量。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-32">
+                <span class="op-title">经营动作归因</span>
+                <span class="op-desc">将活动、价格、资源位、库存、评价变化与销售结果关联，找到真正驱动因素。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>9</span>
+          <strong>售后 / 商家服务</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-33">
+                <span class="op-title">售后责任归因</span>
+                <span class="op-desc">将退货、退款、投诉、差评归因到商品质量、尺码、物流、客服或页面信息。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-34">
+                <span class="op-title">高频问题沉淀</span>
+                <span class="op-desc">把高频售后问题沉淀为商品改进、页面补充、客服话术和商家整改任务。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-35">
+                <span class="op-title">商家响应时效</span>
+                <span class="op-desc">对商家处理工单、补资料、补货、售后举证等响应速度进行管理。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-36">
+                <span class="op-title">处罚与扶持结合</span>
+                <span class="op-desc">对问题商家不只是处罚，也给出整改建议、规则辅导和经营提升路径。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section><section class="matrix-col">
+        <header>
+          <span>10</span>
+          <strong>对账 / 结算 / 复盘</strong>
+        </header>
+        <div class="opportunity-list">
+          <button class="op-card no" type="button" data-id="To B-37">
+                <span class="op-title">对账差异处理</span>
+                <span class="op-desc">对订单、退货、扣点、补贴、赔付、罚款等结算差异建立清晰闭环。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card no" type="button" data-id="To B-38">
+                <span class="op-title">结算进度透明</span>
+                <span class="op-desc">让商家清楚账期、待确认金额、异常单据和预计付款时间。</span>
+                <span class="status no">不能</span>
+              </button><button class="op-card yes" type="button" data-id="To B-39">
+                <span class="op-title">活动复盘标准化</span>
+                <span class="op-desc">每场活动复盘销售、库存、价格、流量、售后、利润和商家协同表现。</span>
+                <span class="status yes">能</span>
+              </button><button class="op-card no" type="button" data-id="To B-40">
+                <span class="op-title">合作关系分层</span>
+                <span class="op-desc">根据经营结果和协同质量决定商家续约、资源倾斜、整改或淘汰策略。</span>
+                <span class="status no">不能</span>
+              </button>
+        </div>
+      </section></div>
+  </section>
+    <section class="summary-section">
+    <h1>飞书能承载的场景清单</h1>
+    <div class="summary-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>分类</th>
+            <th>主流程</th>
+            <th>改善机会点</th>
+            <th>改善点说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+                <td>1</td>
+                <td>To C</td>
+                <td>用户触达 / 进入</td>
+                <td>人群分层</td>
+                <td>将新客、活跃、沉默、高价值、价格敏感等人群拆开运营。</td>
+              </tr><tr>
+                <td>2</td>
+                <td>To C</td>
+                <td>用户触达 / 进入</td>
+                <td>阶段运营</td>
+                <td>针对拉新、首购、复购、沉默唤醒、流失挽回设计差异化动作。</td>
+              </tr><tr>
+                <td>3</td>
+                <td>To C</td>
+                <td>商品详情 / 购买决策</td>
+                <td>信任表达</td>
+                <td>用正品、品控、品牌授权、售后保障等信息强化决策信任。</td>
+              </tr><tr>
+                <td>4</td>
+                <td>To C</td>
+                <td>商品详情 / 购买决策</td>
+                <td>信息补全</td>
+                <td>补齐尺码、材质、场景、洗护、适配人群等高频决策信息。</td>
+              </tr><tr>
+                <td>5</td>
+                <td>To C</td>
+                <td>商品详情 / 购买决策</td>
+                <td>价格证明</td>
+                <td>明确折扣来源、历史价、到手价、优惠组成，降低价格疑虑。</td>
+              </tr><tr>
+                <td>6</td>
+                <td>To C</td>
+                <td>商品详情 / 购买决策</td>
+                <td>评价结构化</td>
+                <td>将评价中的尺码、质量、物流、售后等要素拆解，帮助用户快速判断。</td>
+              </tr><tr>
+                <td>7</td>
+                <td>To C</td>
+                <td>价格 / 优惠 / 会员权益</td>
+                <td>规则简化</td>
+                <td>识别过复杂的优惠门槛和叠加限制，降低用户决策负担。</td>
+              </tr><tr>
+                <td>8</td>
+                <td>To C</td>
+                <td>加购 / 下单 / 支付</td>
+                <td>弃单归因</td>
+                <td>识别价格、库存、物流、支付、信任等导致加购未转化的原因。</td>
+              </tr><tr>
+                <td>9</td>
+                <td>To C</td>
+                <td>加购 / 下单 / 支付</td>
+                <td>链路监控</td>
+                <td>对加购、下单、支付、优惠使用等关键节点建立异常监控。</td>
+              </tr><tr>
+                <td>10</td>
+                <td>To C</td>
+                <td>加购 / 下单 / 支付</td>
+                <td>高值挽回</td>
+                <td>对高价值用户、临门一脚用户设计即时挽回动作。</td>
+              </tr><tr>
+                <td>11</td>
+                <td>To C</td>
+                <td>履约 / 物流</td>
+                <td>延迟预警</td>
+                <td>在订单可能延迟前提前识别、提醒并准备补偿方案。</td>
+              </tr><tr>
+                <td>12</td>
+                <td>To C</td>
+                <td>履约 / 物流</td>
+                <td>异常看板</td>
+                <td>将缺货、拦截、退仓、破损、丢件等异常统一可视化。</td>
+              </tr><tr>
+                <td>13</td>
+                <td>To C</td>
+                <td>履约 / 物流</td>
+                <td>承诺一致</td>
+                <td>让页面承诺、客服口径、物流状态、售后政策保持一致。</td>
+              </tr><tr>
+                <td>14</td>
+                <td>To C</td>
+                <td>售后 / 退换货</td>
+                <td>退因资产化</td>
+                <td>将退货原因从单次处理沉淀为商品、尺码、质量、履约改进资产。</td>
+              </tr><tr>
+                <td>15</td>
+                <td>To C</td>
+                <td>售后 / 退换货</td>
+                <td>进度透明</td>
+                <td>让退款、退货、换货状态可视化，减少用户重复咨询。</td>
+              </tr><tr>
+                <td>16</td>
+                <td>To C</td>
+                <td>售后 / 退换货</td>
+                <td>逆向提效</td>
+                <td>优化取件、质检、入库、退款、换货各环节的内部协同。</td>
+              </tr><tr>
+                <td>17</td>
+                <td>To C</td>
+                <td>售后 / 退换货</td>
+                <td>高频监控</td>
+                <td>对高退货商品、同类投诉、异常店铺进行持续监控和干预。</td>
+              </tr><tr>
+                <td>18</td>
+                <td>To C</td>
+                <td>客服 / VOC</td>
+                <td>客服前哨</td>
+                <td>把客服从被动响应变成问题预警入口，提前识别集中爆发问题。</td>
+              </tr><tr>
+                <td>19</td>
+                <td>To C</td>
+                <td>客服 / VOC</td>
+                <td>问题归因</td>
+                <td>将用户问题归因到商品、价格、物流、售后、页面信息或系统体验。</td>
+              </tr><tr>
+                <td>20</td>
+                <td>To C</td>
+                <td>客服 / VOC</td>
+                <td>舆情预警</td>
+                <td>对差评、社媒反馈、客服高频词进行趋势识别和预警。</td>
+              </tr><tr>
+                <td>21</td>
+                <td>To C</td>
+                <td>客服 / VOC</td>
+                <td>知识沉淀</td>
+                <td>把客服话术、问题处理、补偿规则沉淀为可复用知识库。</td>
+              </tr><tr>
+                <td>22</td>
+                <td>To C</td>
+                <td>评价 / 体验复盘</td>
+                <td>体验复盘</td>
+                <td>将大促、品类、品牌、履约和售后体验按周期复盘。</td>
+              </tr><tr>
+                <td>23</td>
+                <td>To C</td>
+                <td>评价 / 体验复盘</td>
+                <td>评价拆解</td>
+                <td>从评价中拆出尺码、质量、包装、客服、物流等结构化指标。</td>
+              </tr><tr>
+                <td>24</td>
+                <td>To C</td>
+                <td>评价 / 体验复盘</td>
+                <td>反馈入业务</td>
+                <td>将用户反馈自动流转给商品、运营、物流、技术等责任方。</td>
+              </tr><tr>
+                <td>25</td>
+                <td>To C</td>
+                <td>评价 / 体验复盘</td>
+                <td>正反复盘</td>
+                <td>对好评与差评都沉淀可复用做法，避免只处理负反馈。</td>
+              </tr><tr>
+                <td>26</td>
+                <td>To C</td>
+                <td>会员 / 复购</td>
+                <td>复购动因</td>
+                <td>找出复购来自价格、品牌偏好、上新频率、服务体验还是权益价值。</td>
+              </tr><tr>
+                <td>27</td>
+                <td>To C</td>
+                <td>会员 / 复购</td>
+                <td>沉默诊断</td>
+                <td>识别用户沉默是因为价格、频次、品类不匹配、体验差还是触达疲劳。</td>
+              </tr><tr>
+                <td>28</td>
+                <td>To C</td>
+                <td>会员 / 复购</td>
+                <td>会员健康度</td>
+                <td>把售后体验、物流体验、退款次数、客服满意度纳入会员健康评估。</td>
+              </tr><tr>
+                <td>29</td>
+                <td>To C</td>
+                <td>会员 / 复购</td>
+                <td>高值保护</td>
+                <td>优先识别高价值用户的负面体验，避免一次差体验影响长期价值。</td>
+              </tr><tr>
+                <td>30</td>
+                <td>To B</td>
+                <td>品牌 / 商家招募</td>
+                <td>招商线索沉淀</td>
+                <td>把展会、BD 拜访、老商家推荐、平台招商等线索统一沉淀和分析，避免线索散落。</td>
+              </tr><tr>
+                <td>31</td>
+                <td>To B</td>
+                <td>品牌 / 商家招募</td>
+                <td>商机阶段管理</td>
+                <td>明确接触、意向、资质提交、合同推进、试运营等阶段，提升招商转化率。</td>
+              </tr><tr>
+                <td>32</td>
+                <td>To B</td>
+                <td>准入 / 资质审核</td>
+                <td>资质一次性补齐</td>
+                <td>提前明确营业执照、商标授权、质检报告、行业许可等资料清单，减少反复补件。</td>
+              </tr><tr>
+                <td>33</td>
+                <td>To B</td>
+                <td>准入 / 资质审核</td>
+                <td>审核进度透明</td>
+                <td>让商家知道当前卡在哪个环节、谁在处理、预计何时完成，降低沟通成本。</td>
+              </tr><tr>
+                <td>34</td>
+                <td>To B</td>
+                <td>准入 / 资质审核</td>
+                <td>合同条款标准化</td>
+                <td>将扣点、账期、退货责任、活动义务、质保要求沉淀成标准条款和差异审批。</td>
+              </tr><tr>
+                <td>35</td>
+                <td>To B</td>
+                <td>选品 / 货盘规划</td>
+                <td>上新节奏管理</td>
+                <td>结合大促、换季、库存周期和品牌供货计划，优化商品上新与返场节奏。</td>
+              </tr><tr>
+                <td>36</td>
+                <td>To B</td>
+                <td>商品资料 / 上架</td>
+                <td>商品信息完整度</td>
+                <td>提升标题、卖点、尺码、材质、成分、洗护、质保等信息的完整性。</td>
+              </tr><tr>
+                <td>37</td>
+                <td>To B</td>
+                <td>商品资料 / 上架</td>
+                <td>素材质量管理</td>
+                <td>对主图、详情图、模特图、视频、品牌素材建立质量标准和审核流程。</td>
+              </tr><tr>
+                <td>38</td>
+                <td>To B</td>
+                <td>商品资料 / 上架</td>
+                <td>信息复用</td>
+                <td>将品牌介绍、商品参数、尺码模板、售后说明等沉淀为可复用资产。</td>
+              </tr><tr>
+                <td>39</td>
+                <td>To B</td>
+                <td>价格 / 折扣管理</td>
+                <td>折扣策略复盘</td>
+                <td>复盘不同折扣深度对转化、毛利、库存消化和品牌心智的影响。</td>
+              </tr><tr>
+                <td>40</td>
+                <td>To B</td>
+                <td>供应链 / 备货入仓</td>
+                <td>来货计划协同</td>
+                <td>将预约、发货、到仓、质检、入库等节点统一管理，减少临期拥堵。</td>
+              </tr><tr>
+                <td>41</td>
+                <td>To B</td>
+                <td>活动 / 资源排期</td>
+                <td>活动排期可视化</td>
+                <td>统一管理品牌活动、频道资源、大促会场、直播、站内资源位排期。</td>
+              </tr><tr>
+                <td>42</td>
+                <td>To B</td>
+                <td>活动 / 资源排期</td>
+                <td>活动准备清单</td>
+                <td>将货品、价格、库存、素材、客服口径、物流承诺等活动前检查项标准化。</td>
+              </tr><tr>
+                <td>43</td>
+                <td>To B</td>
+                <td>活动 / 资源排期</td>
+                <td>大促协同机制</td>
+                <td>对大促期间的目标、战报、异常、补货、改价、售后问题建立作战机制。</td>
+              </tr><tr>
+                <td>44</td>
+                <td>To B</td>
+                <td>售后 / 商家服务</td>
+                <td>高频问题沉淀</td>
+                <td>把高频售后问题沉淀为商品改进、页面补充、客服话术和商家整改任务。</td>
+              </tr><tr>
+                <td>45</td>
+                <td>To B</td>
+                <td>售后 / 商家服务</td>
+                <td>商家响应时效</td>
+                <td>对商家处理工单、补资料、补货、售后举证等响应速度进行管理。</td>
+              </tr><tr>
+                <td>46</td>
+                <td>To B</td>
+                <td>对账 / 结算 / 复盘</td>
+                <td>活动复盘标准化</td>
+                <td>每场活动复盘销售、库存、价格、流量、售后、利润和商家协同表现。</td>
+              </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <button class="modal-close" type="button" id="modalClose" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const ROWS = [{"id":"To C-1","category":"To C","process":"用户触达 / 进入","opportunity":"精准触达","description":"基于用户分层、消费阶段和活动偏好设计触达策略，减少无效曝光。","coverage":"不能","evidenceText":"能力边界：消费者触达本身依赖 Push、短信、站内信、营销自动化和触达频控；飞书可做触达策略、名单看板和任务协同，但不直接执行触达。","evidenceHtml":"\u003cp>能力边界：消费者触达本身依赖 Push、短信、站内信、营销自动化和触达频控；飞书可做触达策略、名单看板和任务协同，但不直接执行触达。\u003c/p>"},{"id":"To C-2","category":"To C","process":"用户触达 / 进入","opportunity":"入口分流","description":"根据活动目的把用户导向品牌特卖、频道、会场或搜索结果页，降低跳失。","coverage":"不能","evidenceText":"能力边界：App 入口、频道、会场、流量分配和落地页跳转由唯品会前端与流量系统执行；飞书可做资源排期、评审和复盘。","evidenceHtml":"\u003cp>能力边界：App 入口、频道、会场、流量分配和落地页跳转由唯品会前端与流量系统执行；飞书可做资源排期、评审和复盘。\u003c/p>"},{"id":"To C-3","category":"To C","process":"用户触达 / 进入","opportunity":"人群分层","description":"将新客、活跃、沉默、高价值、价格敏感等人群拆开运营。","coverage":"能","evidenceText":"能力理由：用户标签和交易行为可来自会员/CDP/数仓，飞书可承接分层看板、运营名单、策略任务、跟进提醒和复盘沉淀。","evidenceHtml":"\u003cp>能力理由：用户标签和交易行为可来自会员/CDP/数仓，飞书可承接分层看板、运营名单、策略任务、跟进提醒和复盘沉淀。\u003c/p>"},{"id":"To C-4","category":"To C","process":"用户触达 / 进入","opportunity":"阶段运营","description":"针对拉新、首购、复购、沉默唤醒、流失挽回设计差异化动作。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思将电商直播和大促的策划、运营、任务、数据和复盘放到飞书协同；可类比生命周期阶段运营的 SOP、任务和复盘闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思将电商直播和大促的策划、运营、任务、数据和复盘放到飞书协同；可类比生命周期阶段运营的 SOP、任务和复盘闭环。\u003c/p>"},{"id":"To C-5","category":"To C","process":"浏览 / 搜索 / 推荐","opportunity":"找货效率","description":"优化搜索词、筛选条件、类目导航和结果排序，让用户更快找到目标商品。","coverage":"不能","evidenceText":"能力边界：搜索召回、排序、筛选、类目导航和前端体验属于电商搜索系统；飞书可收集问题、管理需求和复盘优化，但不直接提升搜索结果。","evidenceHtml":"\u003cp>能力边界：搜索召回、排序、筛选、类目导航和前端体验属于电商搜索系统；飞书可收集问题、管理需求和复盘优化，但不直接提升搜索结果。\u003c/p>"},{"id":"To C-6","category":"To C","process":"浏览 / 搜索 / 推荐","opportunity":"个性推荐","description":"根据偏好、浏览、购买、退货等行为提升推荐相关性。","coverage":"不能","evidenceText":"能力边界：推荐算法、实时特征、实验平台和推荐位投放不属于飞书；飞书可做策略协同、标注和分析看板。","evidenceHtml":"\u003cp>能力边界：推荐算法、实时特征、实验平台和推荐位投放不属于飞书；飞书可做策略协同、标注和分析看板。\u003c/p>"},{"id":"To C-7","category":"To C","process":"浏览 / 搜索 / 推荐","opportunity":"库存感知","description":"在浏览阶段提前体现尺码、区域库存、售罄风险，减少无效点击。","coverage":"不能","evidenceText":"能力边界：浏览页库存展示依赖库存系统、区域履约和 App 前端；飞书可做库存异常看板和补货协同，但不直接改变消费者端库存感知。","evidenceHtml":"\u003cp>能力边界：浏览页库存展示依赖库存系统、区域履约和 App 前端；飞书可做库存异常看板和补货协同，但不直接改变消费者端库存感知。\u003c/p>"},{"id":"To C-8","category":"To C","process":"浏览 / 搜索 / 推荐","opportunity":"逛购惊喜","description":"通过主题、品牌组合、折扣故事和内容化导购提升逛购兴趣。","coverage":"不能","evidenceText":"能力边界：内容流、主题导购、推荐位呈现和前端互动由 App/内容系统承担；飞书可支撑内容生产、排期和复盘。","evidenceHtml":"\u003cp>能力边界：内容流、主题导购、推荐位呈现和前端互动由 App/内容系统承担；飞书可支撑内容生产、排期和复盘。\u003c/p>"},{"id":"To C-9","category":"To C","process":"商品详情 / 购买决策","opportunity":"信任表达","description":"用正品、品控、品牌授权、售后保障等信息强化决策信任。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中蕉内用多维表格和 AI 支撑电商视觉素材生产；飞书可沉淀品控、授权、售后保障素材，承接审核流、口径同步和更新提醒。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中蕉内用多维表格和 AI 支撑电商视觉素材生产；飞书可沉淀品控、授权、售后保障素材，承接审核流、口径同步和更新提醒。\u003c/p>"},{"id":"To C-10","category":"To C","process":"商品详情 / 购买决策","opportunity":"信息补全","description":"补齐尺码、材质、场景、洗护、适配人群等高频决策信息。","coverage":"能","evidenceText":"案例：海大｜飞书农牧行业应用案例Onepage 覆盖 E 购平台推品上架、订单投诉、商品价格监控与反馈全流程；可类比商品信息补齐、上架协同和反馈闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/YNsEdoOqwoWnc6xsXcBcSCtrnzf\">海大｜飞书农牧行业应用案例Onepage\u003c/a> 覆盖 E 购平台推品上架、订单投诉、商品价格监控与反馈全流程；可类比商品信息补齐、上架协同和反馈闭环。\u003c/p>"},{"id":"To C-11","category":"To C","process":"商品详情 / 购买决策","opportunity":"价格证明","description":"明确折扣来源、历史价、到手价、优惠组成，降低价格疑虑。","coverage":"能","evidenceText":"案例：海大｜飞书农牧行业应用案例Onepage 包含商品价格监控与反馈场景；价格数据来自价格/交易系统，飞书可做价格口径、异常反馈、解释材料和跨团队闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/YNsEdoOqwoWnc6xsXcBcSCtrnzf\">海大｜飞书农牧行业应用案例Onepage\u003c/a> 包含商品价格监控与反馈场景；价格数据来自价格/交易系统，飞书可做价格口径、异常反馈、解释材料和跨团队闭环。\u003c/p>"},{"id":"To C-12","category":"To C","process":"商品详情 / 购买决策","opportunity":"评价结构化","description":"将评价中的尺码、质量、物流、售后等要素拆解，帮助用户快速判断。","coverage":"能","evidenceText":"案例：星纪魅族｜售后VOC AI智能应用 通过多维表格 AI 快速给用户声音打标、预警中低评分，可支撑评价拆解、标签化和问题归因分析。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 通过多维表格 AI 快速给用户声音打标、预警中低评分，可支撑评价拆解、标签化和问题归因分析。\u003c/p>"},{"id":"To C-13","category":"To C","process":"价格 / 优惠 / 会员权益","opportunity":"优惠透明","description":"把券、满减、会员价、平台补贴等到手价规则讲清楚，减少理解成本。","coverage":"不能","evidenceText":"能力边界：到手价、券、满减、会员价展示和核销依赖交易/营销系统；飞书可沉淀规则口径和 FAQ，但不能直接保证消费者端优惠透明。","evidenceHtml":"\u003cp>能力边界：到手价、券、满减、会员价展示和核销依赖交易/营销系统；飞书可沉淀规则口径和 FAQ，但不能直接保证消费者端优惠透明。\u003c/p>"},{"id":"To C-14","category":"To C","process":"价格 / 优惠 / 会员权益","opportunity":"规则简化","description":"识别过复杂的优惠门槛和叠加限制，降低用户决策负担。","coverage":"能","evidenceText":"能力理由：规则落地在营销系统，但飞书可承接规则库、复杂度评审、用户反馈分析、问题推送和优化任务闭环。","evidenceHtml":"\u003cp>能力理由：规则落地在营销系统，但飞书可承接规则库、复杂度评审、用户反馈分析、问题推送和优化任务闭环。\u003c/p>"},{"id":"To C-15","category":"To C","process":"价格 / 优惠 / 会员权益","opportunity":"权益感知","description":"在关键节点提醒会员权益、专属券、退换保障、包邮或积分价值。","coverage":"不能","evidenceText":"能力边界：会员权益提醒、积分、券和包邮等消费者端露出依赖会员/营销/App 系统；飞书可做配置协同和复盘。","evidenceHtml":"\u003cp>能力边界：会员权益提醒、积分、券和包邮等消费者端露出依赖会员/营销/App 系统；飞书可做配置协同和复盘。\u003c/p>"},{"id":"To C-16","category":"To C","process":"价格 / 优惠 / 会员权益","opportunity":"动态定价","description":"根据库存、时效、竞争价格和用户敏感度调整折扣策略。","coverage":"不能","evidenceText":"能力边界：动态定价依赖定价引擎、风控、库存、竞价和实验平台；飞书可做价格监控、审批和复盘，不直接执行定价。","evidenceHtml":"\u003cp>能力边界：动态定价依赖定价引擎、风控、库存、竞价和实验平台；飞书可做价格监控、审批和复盘，不直接执行定价。\u003c/p>"},{"id":"To C-17","category":"To C","process":"加购 / 下单 / 支付","opportunity":"弃单归因","description":"识别价格、库存、物流、支付、信任等导致加购未转化的原因。","coverage":"能","evidenceText":"能力理由：漏斗、订单、支付和埋点数据可来自业务系统，飞书可做可视化分析、原因标签、运营任务分派和复盘闭环。","evidenceHtml":"\u003cp>能力理由：漏斗、订单、支付和埋点数据可来自业务系统，飞书可做可视化分析、原因标签、运营任务分派和复盘闭环。\u003c/p>"},{"id":"To C-18","category":"To C","process":"加购 / 下单 / 支付","opportunity":"链路监控","description":"对加购、下单、支付、优惠使用等关键节点建立异常监控。","coverage":"能","evidenceText":"案例：飞书AI电商落地方案【对客】 中电商大促指挥中心支持活动 SOP、任务分发、数据看板和异常提醒；业务监控数据接入后，飞书可做异常推送和处理闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/LJKgdQdjmo3dMqxgSbgcN1DSnZg\">飞书AI电商落地方案【对客】\u003c/a> 中电商大促指挥中心支持活动 SOP、任务分发、数据看板和异常提醒；业务监控数据接入后，飞书可做异常推送和处理闭环。\u003c/p>"},{"id":"To C-19","category":"To C","process":"加购 / 下单 / 支付","opportunity":"高值挽回","description":"对高价值用户、临门一脚用户设计即时挽回动作。","coverage":"能","evidenceText":"能力理由：高价值/临门一脚名单来自会员、交易和营销系统，飞书可做名单看板、客服/运营任务推送、跟进记录和效果复盘。","evidenceHtml":"\u003cp>能力理由：高价值/临门一脚名单来自会员、交易和营销系统，飞书可做名单看板、客服/运营任务推送、跟进记录和效果复盘。\u003c/p>"},{"id":"To C-20","category":"To C","process":"加购 / 下单 / 支付","opportunity":"结算确定性","description":"在结算页提前明确配送、退换、税费、优惠可用性，减少最后一步流失。","coverage":"不能","evidenceText":"能力边界：运费、税费、优惠可用性、支付可用性由交易系统实时计算和前端展示；飞书可跟踪问题，但不能替代结算引擎。","evidenceHtml":"\u003cp>能力边界：运费、税费、优惠可用性、支付可用性由交易系统实时计算和前端展示；飞书可跟踪问题，但不能替代结算引擎。\u003c/p>"},{"id":"To C-21","category":"To C","process":"履约 / 物流","opportunity":"延迟预警","description":"在订单可能延迟前提前识别、提醒并准备补偿方案。","coverage":"能","evidenceText":"案例：万邑通-客户案例合集 覆盖跨境电商仓储配送、退货和物流链路；订单/物流数据接入后，飞书可做延迟预警、补偿方案任务和责任协同。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/DnkYwll39icPtjku0q6cWrMPnjd\">万邑通-客户案例合集\u003c/a> 覆盖跨境电商仓储配送、退货和物流链路；订单/物流数据接入后，飞书可做延迟预警、补偿方案任务和责任协同。\u003c/p>"},{"id":"To C-22","category":"To C","process":"履约 / 物流","opportunity":"异常看板","description":"将缺货、拦截、退仓、破损、丢件等异常统一可视化。","coverage":"能","evidenceText":"案例：万邑通-客户案例合集 的物流链路场景可类比履约异常管理；OMS/WMS/TMS 数据接入后，飞书可做异常看板、推送和处理闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/DnkYwll39icPtjku0q6cWrMPnjd\">万邑通-客户案例合集\u003c/a> 的物流链路场景可类比履约异常管理；OMS/WMS/TMS 数据接入后，飞书可做异常看板、推送和处理闭环。\u003c/p>"},{"id":"To C-23","category":"To C","process":"履约 / 物流","opportunity":"拆单体验","description":"对多仓、多包裹、多时效订单给出清晰解释和预期管理。","coverage":"不能","evidenceText":"能力边界：拆单逻辑、包裹展示和消费者通知依赖订单履约系统及 App 前端；飞书可管理客服解释口径。","evidenceHtml":"\u003cp>能力边界：拆单逻辑、包裹展示和消费者通知依赖订单履约系统及 App 前端；飞书可管理客服解释口径。\u003c/p>"},{"id":"To C-24","category":"To C","process":"履约 / 物流","opportunity":"承诺一致","description":"让页面承诺、客服口径、物流状态、售后政策保持一致。","coverage":"能","evidenceText":"能力理由：页面和物流状态来自业务系统，但飞书可沉淀统一口径、知识库、变更审批、异常推送和跨团队修正任务。","evidenceHtml":"\u003cp>能力理由：页面和物流状态来自业务系统，但飞书可沉淀统一口径、知识库、变更审批、异常推送和跨团队修正任务。\u003c/p>"},{"id":"To C-25","category":"To C","process":"售后 / 退换货","opportunity":"退因资产化","description":"将退货原因从单次处理沉淀为商品、尺码、质量、履约改进资产。","coverage":"能","evidenceText":"案例：星纪魅族｜售后VOC AI智能应用 支持售后 VOC AI 打标、工单闭环和评分预警，可支撑退因标签化、问题沉淀和业务回流。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 支持售后 VOC AI 打标、工单闭环和评分预警，可支撑退因标签化、问题沉淀和业务回流。\u003c/p>"},{"id":"To C-26","category":"To C","process":"售后 / 退换货","opportunity":"进度透明","description":"让退款、退货、换货状态可视化，减少用户重复咨询。","coverage":"能","evidenceText":"能力理由：售后状态来自售后系统/App，但飞书可面向内部做进度看板、异常推送、催办和客服协同，帮助减少重复咨询。","evidenceHtml":"\u003cp>能力理由：售后状态来自售后系统/App，但飞书可面向内部做进度看板、异常推送、催办和客服协同，帮助减少重复咨询。\u003c/p>"},{"id":"To C-27","category":"To C","process":"售后 / 退换货","opportunity":"逆向提效","description":"优化取件、质检、入库、退款、换货各环节的内部协同。","coverage":"能","evidenceText":"案例：万邑通-客户案例合集 覆盖本地退货、海外仓和物流节点；飞书可承接逆向物流 SOP、异常任务流、责任人和处理进度。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/DnkYwll39icPtjku0q6cWrMPnjd\">万邑通-客户案例合集\u003c/a> 覆盖本地退货、海外仓和物流节点；飞书可承接逆向物流 SOP、异常任务流、责任人和处理进度。\u003c/p>"},{"id":"To C-28","category":"To C","process":"售后 / 退换货","opportunity":"高频监控","description":"对高退货商品、同类投诉、异常店铺进行持续监控和干预。","coverage":"能","evidenceText":"案例：影石 X 飞书｜用户满意度管理场景解决方案 将客服/VOC 数据推送到业务群和看板，推动研发、生产、营销处理；可类比高退货和高投诉问题监控。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/Xz0idNPcJo9uq2xnuMqck2bMnKh\">影石 X 飞书｜用户满意度管理场景解决方案\u003c/a> 将客服/VOC 数据推送到业务群和看板，推动研发、生产、营销处理；可类比高退货和高投诉问题监控。\u003c/p>"},{"id":"To C-29","category":"To C","process":"客服 / VOC","opportunity":"客服前哨","description":"把客服从被动响应变成问题预警入口，提前识别集中爆发问题。","coverage":"能","evidenceText":"案例：影石 X 飞书｜用户满意度管理场景解决方案 通过 VOC 监控、主题群推送、负责人提醒和仪表盘提升用户反馈处理效率。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/Xz0idNPcJo9uq2xnuMqck2bMnKh\">影石 X 飞书｜用户满意度管理场景解决方案\u003c/a> 通过 VOC 监控、主题群推送、负责人提醒和仪表盘提升用户反馈处理效率。\u003c/p>"},{"id":"To C-30","category":"To C","process":"客服 / VOC","opportunity":"问题归因","description":"将用户问题归因到商品、价格、物流、售后、页面信息或系统体验。","coverage":"能","evidenceText":"案例：星纪魅族｜售后VOC AI智能应用 用多维表格 AI 对售后用户声音快速打标、闭环工单，并预警中低评价；业务数据接入后可辅助多维归因。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 用多维表格 AI 对售后用户声音快速打标、闭环工单，并预警中低评价；业务数据接入后可辅助多维归因。\u003c/p>"},{"id":"To C-31","category":"To C","process":"客服 / VOC","opportunity":"舆情预警","description":"对差评、社媒反馈、客服高频词进行趋势识别和预警。","coverage":"能","evidenceText":"案例：星纪魅族｜售后VOC AI智能应用 覆盖中低评价预警和用户声音打标；客服/评价/社媒数据接入后，飞书可做趋势看板、预警推送和处理闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 覆盖中低评价预警和用户声音打标；客服/评价/社媒数据接入后，飞书可做趋势看板、预警推送和处理闭环。\u003c/p>"},{"id":"To C-32","category":"To C","process":"客服 / VOC","opportunity":"知识沉淀","description":"把客服话术、问题处理、补偿规则沉淀为可复用知识库。","coverage":"能","evidenceText":"能力理由：飞书文档、知识库、多维表格、任务和机器人可直接沉淀标准话术、处理规则、责任人和更新记录。","evidenceHtml":"\u003cp>能力理由：飞书文档、知识库、多维表格、任务和机器人可直接沉淀标准话术、处理规则、责任人和更新记录。\u003c/p>"},{"id":"To C-33","category":"To C","process":"评价 / 体验复盘","opportunity":"体验复盘","description":"将大促、品类、品牌、履约和售后体验按周期复盘。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思把电商直播和大促策划、运营、复盘、任务和数据放在飞书协同，适合周期性体验复盘。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思把电商直播和大促策划、运营、复盘、任务和数据放在飞书协同，适合周期性体验复盘。\u003c/p>"},{"id":"To C-34","category":"To C","process":"评价 / 体验复盘","opportunity":"评价拆解","description":"从评价中拆出尺码、质量、包装、客服、物流等结构化指标。","coverage":"能","evidenceText":"案例：星纪魅族｜售后VOC AI智能应用 用 AI 标签化用户声音并推进工单闭环，可支撑评价结构化拆解。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 用 AI 标签化用户声音并推进工单闭环，可支撑评价结构化拆解。\u003c/p>"},{"id":"To C-35","category":"To C","process":"评价 / 体验复盘","opportunity":"反馈入业务","description":"将用户反馈自动流转给商品、运营、物流、技术等责任方。","coverage":"能","evidenceText":"案例：影石 X 飞书｜用户满意度管理场景解决方案 明确将满意度和 VOC 数据流转到研发、生产、营销等业务团队，形成处理闭环。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/Xz0idNPcJo9uq2xnuMqck2bMnKh\">影石 X 飞书｜用户满意度管理场景解决方案\u003c/a> 明确将满意度和 VOC 数据流转到研发、生产、营销等业务团队，形成处理闭环。\u003c/p>"},{"id":"To C-36","category":"To C","process":"评价 / 体验复盘","opportunity":"正反复盘","description":"对好评与差评都沉淀可复用做法，避免只处理负反馈。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思的大促运营复盘场景可承接正向经验与负向问题沉淀，形成复盘资产库。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思的大促运营复盘场景可承接正向经验与负向问题沉淀，形成复盘资产库。\u003c/p>"},{"id":"To C-37","category":"To C","process":"会员 / 复购","opportunity":"复购动因","description":"找出复购来自价格、品牌偏好、上新频率、服务体验还是权益价值。","coverage":"能","evidenceText":"能力理由：交易、会员和服务体验数据来自业务系统，飞书可做复购动因分析看板、标签沉淀、策略任务和复盘。","evidenceHtml":"\u003cp>能力理由：交易、会员和服务体验数据来自业务系统，飞书可做复购动因分析看板、标签沉淀、策略任务和复盘。\u003c/p>"},{"id":"To C-38","category":"To C","process":"会员 / 复购","opportunity":"沉默诊断","description":"识别用户沉默是因为价格、频次、品类不匹配、体验差还是触达疲劳。","coverage":"能","evidenceText":"能力理由：会员生命周期、触达、订单和客服数据接入后，飞书可做沉默原因看板、诊断标签、运营任务和效果复盘。","evidenceHtml":"\u003cp>能力理由：会员生命周期、触达、订单和客服数据接入后，飞书可做沉默原因看板、诊断标签、运营任务和效果复盘。\u003c/p>"},{"id":"To C-39","category":"To C","process":"会员 / 复购","opportunity":"会员健康度","description":"把售后体验、物流体验、退款次数、客服满意度纳入会员健康评估。","coverage":"能","evidenceText":"案例：影石 X 飞书｜用户满意度管理场景解决方案 用满意度和 VOC 数据驱动业务改进；飞书可汇总服务体验指标，形成会员健康看板和预警任务。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/Xz0idNPcJo9uq2xnuMqck2bMnKh\">影石 X 飞书｜用户满意度管理场景解决方案\u003c/a> 用满意度和 VOC 数据驱动业务改进；飞书可汇总服务体验指标，形成会员健康看板和预警任务。\u003c/p>"},{"id":"To C-40","category":"To C","process":"会员 / 复购","opportunity":"高值保护","description":"优先识别高价值用户的负面体验，避免一次差体验影响长期价值。","coverage":"能","evidenceText":"能力理由：高价值识别和权益来自会员/客服系统，飞书可承载预警看板、服务 SOP、任务分派、升级处理和跟进复盘。","evidenceHtml":"\u003cp>能力理由：高价值识别和权益来自会员/客服系统，飞书可承载预警看板、服务 SOP、任务分派、升级处理和跟进复盘。\u003c/p>"},{"id":"To B-1","category":"To B","process":"品牌 / 商家招募","opportunity":"目标品牌分层","description":"按品牌影响力、价格带、品类补位、供应能力、折扣空间识别优先招商对象。","coverage":"不能","evidenceText":"严格口径：不能。飞书可承载品牌池、评分表和跟进流程，但品牌影响力、供给缺口、价格带竞争力等核心判断依赖外部市场数据、平台经营数据和招商策略。","evidenceHtml":"\u003cp>严格口径：不能。飞书可承载品牌池、评分表和跟进流程，但品牌影响力、供给缺口、价格带竞争力等核心判断依赖外部市场数据、平台经营数据和招商策略。\u003c/p>"},{"id":"To B-2","category":"To B","process":"品牌 / 商家招募","opportunity":"招商线索沉淀","description":"把展会、BD 拜访、老商家推荐、平台招商等线索统一沉淀，避免线索散落。","coverage":"能","evidenceText":"严格口径：能。飞书妙记、多维表格、任务和消息提醒可直接承载线索分析、录入、分配、跟进、去重和转化沉淀。","evidenceHtml":"\u003cp>严格口径：能。飞书妙记、多维表格、任务和消息提醒可直接承载线索分析、录入、分配、跟进、去重和转化沉淀。\u003c/p>"},{"id":"To B-3","category":"To B","process":"品牌 / 商家招募","opportunity":"商机阶段管理","description":"明确接触、意向、资质提交、合同推进、试运营等阶段，提升招商转化率。","coverage":"能","evidenceText":"案例：飞书X影刀｜跨境电商行业解决方案 提到用供应商库和采购记录管理供应商信息及合作详情；严格口径下，阶段流转、责任人、下一步动作和沉淀可由飞书直接承载。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/NV3WdVUG4oTztVx4tEqcG12Fnzg\">飞书X影刀｜跨境电商行业解决方案\u003c/a> 提到用供应商库和采购记录管理供应商信息及合作详情；严格口径下，阶段流转、责任人、下一步动作和沉淀可由飞书直接承载。\u003c/p>"},{"id":"To B-4","category":"To B","process":"品牌 / 商家招募","opportunity":"品牌价值评估","description":"不只看品牌知名度，也评估货盘稳定性、价格竞争力、退货风险和复购潜力。","coverage":"不能","evidenceText":"严格口径：不能。飞书可做评估表和评审流程，但货盘稳定性、价格竞争力、退货风险、复购潜力的主体数据和评价模型来自电商经营、交易、售后和外部市场系统。","evidenceHtml":"\u003cp>严格口径：不能。飞书可做评估表和评审流程，但货盘稳定性、价格竞争力、退货风险、复购潜力的主体数据和评价模型来自电商经营、交易、售后和外部市场系统。\u003c/p>"},{"id":"To B-5","category":"To B","process":"准入 / 资质审核","opportunity":"资质一次性补齐","description":"提前明确营业执照、商标授权、质检报告、行业许可等资料清单，减少反复补件。","coverage":"能","evidenceText":"严格口径：能。资料清单、表单收集、附件沉淀、补件提醒和审核任务可在飞书内完成；资质真伪核验另属外部风控/法务能力。","evidenceHtml":"\u003cp>严格口径：能。资料清单、表单收集、附件沉淀、补件提醒和审核任务可在飞书内完成；资质真伪核验另属外部风控/法务能力。\u003c/p>"},{"id":"To B-6","category":"To B","process":"准入 / 资质审核","opportunity":"审核进度透明","description":"让商家知道当前卡在哪个环节、谁在处理、预计何时完成，降低沟通成本。","coverage":"能","evidenceText":"严格口径：能。飞书可直接用状态字段、视图、仪表盘和任务通知展示审核阶段、卡点、处理人和预计完成时间。","evidenceHtml":"\u003cp>严格口径：能。飞书可直接用状态字段、视图、仪表盘和任务通知展示审核阶段、卡点、处理人和预计完成时间。\u003c/p>"},{"id":"To B-7","category":"To B","process":"准入 / 资质审核","opportunity":"风险前置识别","description":"对假授权、资质过期、类目限制、历史违规、售后风险进行准入前筛查。","coverage":"不能","evidenceText":"严格口径：不能。飞书可记录风险项和触发人工审核，但假授权识别、违规历史、类目限制和售后风险需要平台风控、资质核验及历史交易/售后数据。","evidenceHtml":"\u003cp>严格口径：不能。飞书可记录风险项和触发人工审核，但假授权识别、违规历史、类目限制和售后风险需要平台风控、资质核验及历史交易/售后数据。\u003c/p>"},{"id":"To B-8","category":"To B","process":"准入 / 资质审核","opportunity":"合同条款标准化","description":"将扣点、账期、退货责任、活动义务、质保要求沉淀成标准条款和差异审批。","coverage":"能","evidenceText":"严格口径：能。合同模板、条款库、差异审批、版本记录和法务协同可由飞书文档、知识库、多维表格和审批流程承载。","evidenceHtml":"\u003cp>严格口径：能。合同模板、条款库、差异审批、版本记录和法务协同可由飞书文档、知识库、多维表格和审批流程承载。\u003c/p>"},{"id":"To B-9","category":"To B","process":"选品 / 货盘规划","opportunity":"爆品识别","description":"基于历史销售、平台人群、季节趋势和库存深度识别更适合特卖的商品。","coverage":"不能","evidenceText":"严格口径：不能。爆品识别的主体能力是经营数据建模、用户画像、趋势判断和商品算法，飞书只能承载候选清单、评审过程和复盘。","evidenceHtml":"\u003cp>严格口径：不能。爆品识别的主体能力是经营数据建模、用户画像、趋势判断和商品算法，飞书只能承载候选清单、评审过程和复盘。\u003c/p>"},{"id":"To B-10","category":"To B","process":"选品 / 货盘规划","opportunity":"货盘结构优化","description":"平衡引流款、利润款、形象款、清仓款，避免货盘只靠低价驱动。","coverage":"不能","evidenceText":"严格口径：不能。飞书可承载货盘评审表和任务协同，但货盘结构优化依赖毛利、库存、动销、品牌策略、流量资源和平台商品策略。","evidenceHtml":"\u003cp>严格口径：不能。飞书可承载货盘评审表和任务协同，但货盘结构优化依赖毛利、库存、动销、品牌策略、流量资源和平台商品策略。\u003c/p>"},{"id":"To B-11","category":"To B","process":"选品 / 货盘规划","opportunity":"品类补位","description":"发现平台在尺码、价格带、风格、季节、区域需求上的供给缺口。","coverage":"不能","evidenceText":"严格口径：不能。品类缺口识别依赖搜索、浏览、交易、库存、退货和市场趋势数据，飞书可做汇总与评审，但不能独立发现平台供给缺口。","evidenceHtml":"\u003cp>严格口径：不能。品类缺口识别依赖搜索、浏览、交易、库存、退货和市场趋势数据，飞书可做汇总与评审，但不能独立发现平台供给缺口。\u003c/p>"},{"id":"To B-12","category":"To B","process":"选品 / 货盘规划","opportunity":"上新节奏管理","description":"结合大促、换季、库存周期和品牌供货计划，优化商品上新与返场节奏。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思将直播、大促等策划、运营、任务、数据和复盘放在飞书协同。严格口径下，排期、任务、责任人、节奏看板可由飞书覆盖；上新策略判断仍由业务系统和运营决策提供。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思将直播、大促等策划、运营、任务、数据和复盘放在飞书协同。严格口径下，排期、任务、责任人、节奏看板可由飞书覆盖；上新策略判断仍由业务系统和运营决策提供。\u003c/p>"},{"id":"To B-13","category":"To B","process":"商品资料 / 上架","opportunity":"商品信息完整度","description":"提升标题、卖点、尺码、材质、成分、洗护、质保等信息的完整性。","coverage":"能","evidenceText":"案例：海大｜飞书农牧行业应用案例Onepage 覆盖 E 购平台推品上架、订单投诉、价格监控与反馈。严格口径下，资料清单、字段完整度、审核和补齐闭环可由飞书承载。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/YNsEdoOqwoWnc6xsXcBcSCtrnzf\">海大｜飞书农牧行业应用案例Onepage\u003c/a> 覆盖 E 购平台推品上架、订单投诉、价格监控与反馈。严格口径下，资料清单、字段完整度、审核和补齐闭环可由飞书承载。\u003c/p>"},{"id":"To B-14","category":"To B","process":"商品资料 / 上架","opportunity":"素材质量管理","description":"对主图、详情图、模特图、视频、品牌素材建立质量标准和审核流程。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中蕉内用多维表格和 AI 支撑电商视觉素材生产。严格口径下，素材生产排期、审核标准、版本沉淀和任务闭环可由飞书覆盖。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中蕉内用多维表格和 AI 支撑电商视觉素材生产。严格口径下，素材生产排期、审核标准、版本沉淀和任务闭环可由飞书覆盖。\u003c/p>"},{"id":"To B-15","category":"To B","process":"商品资料 / 上架","opportunity":"上架异常预警","description":"对缺图、缺规格、价格不一致、类目错挂、库存异常等问题提前预警。","coverage":"不能","evidenceText":"严格口径：不能。飞书可承接异常清单和处理闭环，但缺图、错挂、价格、类目、库存异常的实时识别依赖商品中心、价格系统、库存系统和上架系统。","evidenceHtml":"\u003cp>严格口径：不能。飞书可承接异常清单和处理闭环，但缺图、错挂、价格、类目、库存异常的实时识别依赖商品中心、价格系统、库存系统和上架系统。\u003c/p>"},{"id":"To B-16","category":"To B","process":"商品资料 / 上架","opportunity":"信息复用","description":"将品牌介绍、商品参数、尺码模板、售后说明等沉淀为可复用资产。","coverage":"能","evidenceText":"严格口径：能。飞书文档、知识库、多维表格可直接沉淀品牌资料、商品参数、尺码模板、售后说明、版本记录和检索入口。","evidenceHtml":"\u003cp>严格口径：能。飞书文档、知识库、多维表格可直接沉淀品牌资料、商品参数、尺码模板、售后说明、版本记录和检索入口。\u003c/p>"},{"id":"To B-17","category":"To B","process":"价格 / 折扣管理","opportunity":"到手价校验","description":"校验活动价、券后价、会员价、平台补贴后的最终价格是否准确。","coverage":"不能","evidenceText":"严格口径：不能。到手价计算和校验依赖营销、优惠券、会员、交易、补贴和结算系统，飞书只能做规则审核和异常协同。","evidenceHtml":"\u003cp>严格口径：不能。到手价计算和校验依赖营销、优惠券、会员、交易、补贴和结算系统，飞书只能做规则审核和异常协同。\u003c/p>"},{"id":"To B-18","category":"To B","process":"价格 / 折扣管理","opportunity":"价格竞争监控","description":"对竞品平台价格、历史价、建议零售价和唯品会到手价进行持续对比。","coverage":"不能","evidenceText":"严格口径：不能。飞书可做监控结果沉淀和预警协同，但竞品价格采集、历史价数据、实时比价和合规校验不属于飞书原生能力。可参考 20260601｜消费综合 KA CSM大周报 的价格管理场景，但其仍依赖数据采集/业务系统。","evidenceHtml":"\u003cp>严格口径：不能。飞书可做监控结果沉淀和预警协同，但竞品价格采集、历史价数据、实时比价和合规校验不属于飞书原生能力。可参考 \u003ca href=\"https://bytedance.larkoffice.com/wiki/OOcTwL9rCiwpZWkm0y0cQ92snfc\">20260601｜消费综合 KA CSM大周报\u003c/a> 的价格管理场景，但其仍依赖数据采集/业务系统。\u003c/p>"},{"id":"To B-19","category":"To B","process":"价格 / 折扣管理","opportunity":"折扣策略复盘","description":"复盘不同折扣深度对转化、毛利、库存消化和品牌心智的影响。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思将活动运营和复盘沉淀到飞书。严格口径下，复盘模板、数据汇总、会议纪要、任务闭环和结论沉淀可由飞书覆盖；转化/毛利数据需外部接入。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思将活动运营和复盘沉淀到飞书。严格口径下，复盘模板、数据汇总、会议纪要、任务闭环和结论沉淀可由飞书覆盖；转化/毛利数据需外部接入。\u003c/p>"},{"id":"To B-20","category":"To B","process":"价格 / 折扣管理","opportunity":"价格异常闭环","description":"对价格倒挂、低于授权底价、优惠叠加异常等情况建立快速处理机制。","coverage":"不能","evidenceText":"严格口径：不能。异常闭环协同可由飞书承载，但价格倒挂、授权底价、优惠叠加异常的判断和修正必须发生在价格、营销、合同和交易系统。","evidenceHtml":"\u003cp>严格口径：不能。异常闭环协同可由飞书承载，但价格倒挂、授权底价、优惠叠加异常的判断和修正必须发生在价格、营销、合同和交易系统。\u003c/p>"},{"id":"To B-21","category":"To B","process":"供应链 / 备货入仓","opportunity":"备货预测","description":"根据活动目标、历史动销、尺码结构、退货率预测合理备货量。","coverage":"不能","evidenceText":"严格口径：不能。备货预测是供应链算法和经营数据能力，飞书可承接预测结果确认、人工修正和审批，但不是预测引擎。","evidenceHtml":"\u003cp>严格口径：不能。备货预测是供应链算法和经营数据能力，飞书可承接预测结果确认、人工修正和审批，但不是预测引擎。\u003c/p>"},{"id":"To B-22","category":"To B","process":"供应链 / 备货入仓","opportunity":"来货计划协同","description":"将预约、发货、到仓、质检、入库等节点统一管理，减少临期拥堵。","coverage":"能","evidenceText":"案例：物流行业｜客户实践及场景Onepage 中极兔用多维表格建立车队招采、供应商管理、采购、销账、提油和质检的全流程管控。严格口径下，来货节点计划、责任人、状态、异常任务可由飞书覆盖。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/SopYdRa5LoTMe8xHvt5cTAZ1nUN\">物流行业｜客户实践及场景Onepage\u003c/a> 中极兔用多维表格建立车队招采、供应商管理、采购、销账、提油和质检的全流程管控。严格口径下，来货节点计划、责任人、状态、异常任务可由飞书覆盖。\u003c/p>"},{"id":"To B-23","category":"To B","process":"供应链 / 备货入仓","opportunity":"库存健康监控","description":"对滞销、断码、缺货、超卖、库龄过长等库存问题建立监控。","coverage":"不能","evidenceText":"严格口径：不能。库存健康监控依赖 WMS/OMS/ERP 的实时库存、库龄、动销和超卖数据，飞书只能作为看板和预警协同层。","evidenceHtml":"\u003cp>严格口径：不能。库存健康监控依赖 WMS/OMS/ERP 的实时库存、库龄、动销和超卖数据，飞书只能作为看板和预警协同层。\u003c/p>"},{"id":"To B-24","category":"To B","process":"供应链 / 备货入仓","opportunity":"异常责任定位","description":"对迟到货、少发、错发、质检不通过、包装不合规等问题快速定位责任方。","coverage":"不能","evidenceText":"严格口径：不能。飞书可记录异常和推动处理，但责任自动定位依赖采购、仓储、质检、物流和供应商履约数据及责任规则。","evidenceHtml":"\u003cp>严格口径：不能。飞书可记录异常和推动处理，但责任自动定位依赖采购、仓储、质检、物流和供应商履约数据及责任规则。\u003c/p>"},{"id":"To B-25","category":"To B","process":"活动 / 资源排期","opportunity":"活动排期可视化","description":"统一管理品牌活动、频道资源、大促会场、直播、站内资源位排期。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思把电商直播、大促、年货节等策划、任务、数据和复盘放到飞书协同。严格口径下，活动排期和资源日历可由飞书覆盖。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思把电商直播、大促、年货节等策划、任务、数据和复盘放到飞书协同。严格口径下，活动排期和资源日历可由飞书覆盖。\u003c/p>"},{"id":"To B-26","category":"To B","process":"活动 / 资源排期","opportunity":"资源匹配效率","description":"根据品牌等级、货盘质量、价格竞争力和目标人群匹配资源位。","coverage":"不能","evidenceText":"严格口径：不能。资源匹配依赖平台流量策略、资源位规则、用户人群、货盘质量、价格力和推荐/投放系统；飞书只能承载评审和复盘。","evidenceHtml":"\u003cp>严格口径：不能。资源匹配依赖平台流量策略、资源位规则、用户人群、货盘质量、价格力和推荐/投放系统；飞书只能承载评审和复盘。\u003c/p>"},{"id":"To B-27","category":"To B","process":"活动 / 资源排期","opportunity":"活动准备清单","description":"将货品、价格、库存、素材、客服口径、物流承诺等活动前检查项标准化。","coverage":"能","evidenceText":"案例：飞书AI电商落地方案【对客】 中大促指挥中心支持活动 SOP、任务分发、数据看板和异常提醒。严格口径下，准备清单、责任分派和完成检查可由飞书覆盖。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/LJKgdQdjmo3dMqxgSbgcN1DSnZg\">飞书AI电商落地方案【对客】\u003c/a> 中大促指挥中心支持活动 SOP、任务分发、数据看板和异常提醒。严格口径下，准备清单、责任分派和完成检查可由飞书覆盖。\u003c/p>"},{"id":"To B-28","category":"To B","process":"活动 / 资源排期","opportunity":"大促协同机制","description":"对大促期间的目标、战报、异常、补货、改价、售后问题建立作战机制。","coverage":"能","evidenceText":"案例：飞书AI电商落地方案【对客】 支持大促流程、任务提醒和作战看板。严格口径下，作战室、任务、纪要、战报和异常协同可由飞书覆盖；补货/改价执行仍在业务系统。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/LJKgdQdjmo3dMqxgSbgcN1DSnZg\">飞书AI电商落地方案【对客】\u003c/a> 支持大促流程、任务提醒和作战看板。严格口径下，作战室、任务、纪要、战报和异常协同可由飞书覆盖；补货/改价执行仍在业务系统。\u003c/p>"},{"id":"To B-29","category":"To B","process":"经营 / 数据监控","opportunity":"商家经营看板","description":"统一查看 GMV、转化率、客单价、退货率、库存周转、售后投诉等指标。","coverage":"不能","evidenceText":"严格口径：不能。经营看板主体数据来自交易、流量、库存、售后和财务系统，飞书可展示和协同，但不原生生产这些经营指标。","evidenceHtml":"\u003cp>严格口径：不能。经营看板主体数据来自交易、流量、库存、售后和财务系统，飞书可展示和协同，但不原生生产这些经营指标。\u003c/p>"},{"id":"To B-30","category":"To B","process":"经营 / 数据监控","opportunity":"异常指标预警","description":"对销量骤降、退货升高、库存不足、差评上升、履约延迟等情况自动预警。","coverage":"不能","evidenceText":"严格口径：不能。销量、退货、库存、差评、履约延迟的实时监测依赖业务系统数据与规则引擎；飞书可接收预警并推动任务闭环。","evidenceHtml":"\u003cp>严格口径：不能。销量、退货、库存、差评、履约延迟的实时监测依赖业务系统数据与规则引擎；飞书可接收预警并推动任务闭环。\u003c/p>"},{"id":"To B-31","category":"To B","process":"经营 / 数据监控","opportunity":"商家健康度","description":"从销售、供货、履约、售后、合规、协同响应等维度评估商家质量。","coverage":"不能","evidenceText":"严格口径：不能。健康度模型需要多系统数据和商家治理规则，飞书可做评分表、仪表盘和评审流程，但不能独立给出可靠健康度。","evidenceHtml":"\u003cp>严格口径：不能。健康度模型需要多系统数据和商家治理规则，飞书可做评分表、仪表盘和评审流程，但不能独立给出可靠健康度。\u003c/p>"},{"id":"To B-32","category":"To B","process":"经营 / 数据监控","opportunity":"经营动作归因","description":"将活动、价格、资源位、库存、评价变化与销售结果关联，找到真正驱动因素。","coverage":"不能","evidenceText":"严格口径：不能。经营归因需要埋点、实验平台、BI/算法模型和统一数据口径，飞书可做复盘沉淀，但不能证明因果。","evidenceHtml":"\u003cp>严格口径：不能。经营归因需要埋点、实验平台、BI/算法模型和统一数据口径，飞书可做复盘沉淀，但不能证明因果。\u003c/p>"},{"id":"To B-33","category":"To B","process":"售后 / 商家服务","opportunity":"售后责任归因","description":"将退货、退款、投诉、差评归因到商品质量、尺码、物流、客服或页面信息。","coverage":"不能","evidenceText":"严格口径：不能。星纪魅族｜售后VOC AI智能应用 可支撑 VOC 打标和工单闭环，但真正的责任归因需要商品、物流、客服、售后和订单数据联判，飞书不能单独完成。","evidenceHtml":"\u003cp>严格口径：不能。\u003ca href=\"https://bytedance.larkoffice.com/wiki/Xwavw4eR0i64tKkbsgCcLj40nuc\">星纪魅族｜售后VOC AI智能应用\u003c/a> 可支撑 VOC 打标和工单闭环，但真正的责任归因需要商品、物流、客服、售后和订单数据联判，飞书不能单独完成。\u003c/p>"},{"id":"To B-34","category":"To B","process":"售后 / 商家服务","opportunity":"高频问题沉淀","description":"把高频售后问题沉淀为商品改进、页面补充、客服话术和商家整改任务。","coverage":"能","evidenceText":"案例：影石 X 飞书｜用户满意度管理场景解决方案 将满意度和 VOC 数据流转到研发、生产、营销等团队。严格口径下，问题沉淀、知识沉淀、整改任务和责任流转可由飞书覆盖。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/Xz0idNPcJo9uq2xnuMqck2bMnKh\">影石 X 飞书｜用户满意度管理场景解决方案\u003c/a> 将满意度和 VOC 数据流转到研发、生产、营销等团队。严格口径下，问题沉淀、知识沉淀、整改任务和责任流转可由飞书覆盖。\u003c/p>"},{"id":"To B-35","category":"To B","process":"售后 / 商家服务","opportunity":"商家响应时效","description":"对商家处理工单、补资料、补货、售后举证等响应速度进行管理。","coverage":"能","evidenceText":"案例：万家乐x飞书｜经销商协同提效方案 覆盖经销商售后工单和协同场景。严格口径下，工单 SLA、提醒、升级、状态和处理结果可由飞书承载。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/docx/EpjCdVlOzojW8RxmQr5crykXnIM\">万家乐x飞书｜经销商协同提效方案\u003c/a> 覆盖经销商售后工单和协同场景。严格口径下，工单 SLA、提醒、升级、状态和处理结果可由飞书承载。\u003c/p>"},{"id":"To B-36","category":"To B","process":"售后 / 商家服务","opportunity":"处罚与扶持结合","description":"对问题商家不只是处罚，也给出整改建议、规则辅导和经营提升路径。","coverage":"不能","evidenceText":"严格口径：不能。飞书可承载整改任务、辅导材料和复盘，但处罚、资源限制、治理分层和扶持政策执行属于商家治理与经营系统能力。","evidenceHtml":"\u003cp>严格口径：不能。飞书可承载整改任务、辅导材料和复盘，但处罚、资源限制、治理分层和扶持政策执行属于商家治理与经营系统能力。\u003c/p>"},{"id":"To B-37","category":"To B","process":"对账 / 结算 / 复盘","opportunity":"对账差异处理","description":"对订单、退货、扣点、补贴、赔付、罚款等结算差异建立清晰闭环。","coverage":"不能","evidenceText":"严格口径：不能。CMI｜智能对账助手 可作为对账协同和智能助手参考，但唯品会商家结算差异处理依赖订单、退货、扣点、补贴、赔付和财务结算系统。","evidenceHtml":"\u003cp>严格口径：不能。\u003ca href=\"https://bytedance.larkoffice.com/docx/OWBId7FV1o5lgexvExpcd8XznCg\">CMI｜智能对账助手\u003c/a> 可作为对账协同和智能助手参考，但唯品会商家结算差异处理依赖订单、退货、扣点、补贴、赔付和财务结算系统。\u003c/p>"},{"id":"To B-38","category":"To B","process":"对账 / 结算 / 复盘","opportunity":"结算进度透明","description":"让商家清楚账期、待确认金额、异常单据和预计付款时间。","coverage":"不能","evidenceText":"严格口径：不能。飞书可做内部结算状态看板和提醒，但面向商家的账期、金额、异常单据、付款时间必须以财务/结算系统为准。","evidenceHtml":"\u003cp>严格口径：不能。飞书可做内部结算状态看板和提醒，但面向商家的账期、金额、异常单据、付款时间必须以财务/结算系统为准。\u003c/p>"},{"id":"To B-39","category":"To B","process":"对账 / 结算 / 复盘","opportunity":"活动复盘标准化","description":"每场活动复盘销售、库存、价格、流量、售后、利润和商家协同表现。","coverage":"能","evidenceText":"案例：飞书电商案例分享 中歌力思将活动运营和复盘沉淀到飞书。严格口径下，复盘模板、会议纪要、结论沉淀和后续任务可由飞书覆盖；指标数据需外部接入。","evidenceHtml":"\u003cp>案例：\u003ca href=\"https://bytedance.larkoffice.com/wiki/WjHzw00SMi56C8kxs59cjWscnDb\">飞书电商案例分享\u003c/a> 中歌力思将活动运营和复盘沉淀到飞书。严格口径下，复盘模板、会议纪要、结论沉淀和后续任务可由飞书覆盖；指标数据需外部接入。\u003c/p>"},{"id":"To B-40","category":"To B","process":"对账 / 结算 / 复盘","opportunity":"合作关系分层","description":"根据经营结果和协同质量决定商家续约、资源倾斜、整改或淘汰策略。","coverage":"不能","evidenceText":"严格口径：不能。飞书可提供分层评审材料和任务协同，但续约、资源倾斜、整改或淘汰依赖经营指标、商家治理规则和平台资源策略。","evidenceHtml":"\u003cp>严格口径：不能。飞书可提供分层评审材料和任务协同，但续约、资源倾斜、整改或淘汰依赖经营指标、商家治理规则和平台资源策略。\u003c/p>"}];
+    const rowById = new Map(ROWS.map((row) => [row.id, row]));
+    const modal = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalClose = document.getElementById("modalClose");
+
+    function escape(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function coverageClass(value) {
+      return value === "能" ? "yes" : "no";
+    }
+
+    function detailRow(label, value) {
+      return '<div class="detail-row"><div class="detail-label">' + escape(label) + '</div><div>' + value + '</div></div>';
+    }
+
+    function openModal(row) {
+      modalTitle.textContent = row.opportunity;
+      modalBody.innerHTML =
+        detailRow("分类", escape(row.category)) +
+        detailRow("主流程", escape(row.process)) +
+        detailRow("改善机会点", escape(row.opportunity)) +
+        detailRow("改善点说明", escape(row.description)) +
+        detailRow("飞书是否能覆盖", '<span class="chip ' + coverageClass(row.coverage) + '">' + escape(row.coverage) + '</span>') +
+        detailRow("对应的客户案例、场景案例", row.evidenceHtml || escape(row.evidenceText));
+      modal.classList.add("open");
+      modalClose.focus();
+    }
+
+    document.querySelectorAll(".op-card").forEach((button) => {
+      button.addEventListener("click", () => {
+        const row = rowById.get(button.dataset.id);
+        if (row) openModal(row);
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove("open");
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>
