@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>唯品会 x 飞书：虚拟智囊团群聊</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b12;
+      --panel: rgba(255, 255, 255, 0.075);
+      --panel-strong: rgba(255, 255, 255, 0.11);
+      --line: rgba(255, 255, 255, 0.14);
+      --text: #f6fbff;
+      --muted: rgba(232, 241, 250, 0.68);
+      --soft: rgba(232, 241, 250, 0.46);
+      --cyan: #31dbc4;
+      --blue: #4f8cff;
+      --amber: #ffbd66;
+      --green: #7cde8a;
+      --red: #ff6d7e;
+      --violet: #a18aff;
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(255,255,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.032) 1px, transparent 1px),
+        radial-gradient(720px 420px at 18% 10%, rgba(49, 219, 196, 0.20), transparent 62%),
+        radial-gradient(760px 460px at 86% 88%, rgba(79, 140, 255, 0.18), transparent 68%),
+        linear-gradient(135deg, #04070d 0%, #0b1420 52%, #05070c 100%);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 34px;
+    }
+
+    .chat-shell {
+      width: min(1180px, 100%);
+      height: min(820px, calc(100vh - 68px));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(7, 11, 18, 0.82);
+      box-shadow: 0 24px 90px rgba(0, 0, 0, 0.46);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .room-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .room-icon {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #041016;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      box-shadow: 0 0 34px rgba(49, 219, 196, 0.28);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(19px, 2.2vw, 28px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #dffff9;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 16px var(--cyan);
+    }
+
+    .messages {
+      padding: 26px 24px 10px;
+      overflow: auto;
+      scroll-behavior: smooth;
+    }
+
+    .msg {
+      display: none;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 14px;
+      margin: 0 0 18px;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .msg.visible {
+      display: grid;
+      animation: messageIn 520ms ease forwards;
+    }
+
+    .typing-msg {
+      display: none;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 14px;
+      margin: 0 0 18px;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .typing-msg.visible {
+      display: grid;
+      animation: messageIn 360ms ease forwards;
+    }
+
+    .typing-bubble {
+      width: fit-content;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.065);
+      color: var(--muted);
+      font-size: 14px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.18);
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.22);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.28), transparent 42%),
+        var(--avatar-bg, linear-gradient(135deg, #23324a, #31dbc4));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+    }
+
+    .avatar.photo {
+      background-image:
+        linear-gradient(145deg, rgba(255,255,255,0.12), transparent 44%),
+        var(--photo);
+      background-size: cover;
+      background-position: var(--photo-pos, center);
+    }
+
+    .avatar::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 9px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(255, 230, 205, 0.88);
+      box-shadow: 0 20px 0 9px rgba(255, 230, 205, 0.62);
+    }
+
+    .avatar::after {
+      content: attr(data-initial);
+      position: absolute;
+      inset: auto 0 4px;
+      text-align: center;
+      color: rgba(255,255,255,0.72);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .avatar.photo::before,
+    .avatar.photo::after {
+      display: none;
+    }
+
+    .bubble-wrap {
+      min-width: 0;
+    }
+
+    .speaker {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 0 0 6px;
+    }
+
+    .speaker strong {
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .speaker span {
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .bubble {
+      width: fit-content;
+      max-width: 890px;
+      padding: 15px 17px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.22);
+    }
+
+    .host .bubble {
+      border-color: rgba(49, 219, 196, 0.32);
+      background:
+        linear-gradient(90deg, rgba(49,219,196,0.13), transparent 42%),
+        var(--panel-strong);
+    }
+
+    .bubble h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .bubble p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.75;
+    }
+
+    .bubble p + p {
+      margin-top: 10px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      padding: 5px 9px;
+      border-radius: 99px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #dffefa;
+      background: rgba(49,219,196,0.08);
+      font-size: 12px;
+    }
+
+    .chat-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .input-fake {
+      flex: 1;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+      color: var(--soft);
+      font-size: 14px;
+    }
+
+    .input-fake.done .dots {
+      display: none;
+    }
+
+    .countdown {
+      margin-left: auto;
+      min-width: 54px;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(49,219,196,0.22);
+      color: #dffefa;
+      background: rgba(49,219,196,0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .input-fake.done .countdown {
+      display: none;
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .dots i {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: dot 1.2s ease-in-out infinite;
+    }
+
+    .dots i:nth-child(2) { animation-delay: 0.16s; }
+    .dots i:nth-child(3) { animation-delay: 0.32s; }
+
+    .action {
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid rgba(49,219,196,0.34);
+      border-radius: 12px;
+      color: var(--text);
+      background: rgba(49,219,196,0.12);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .action:hover {
+      background: rgba(49,219,196,0.18);
+    }
+
+    .credits {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.5;
+      max-width: 250px;
+    }
+
+    .credits summary {
+      cursor: pointer;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .credits a {
+      color: #dffefa;
+      text-decoration: none;
+    }
+
+    .credits a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes messageIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes dot {
+      0%, 80%, 100% { opacity: 0.28; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 12px;
+      }
+
+      .chat-shell {
+        height: calc(100vh - 24px);
+        border-radius: 12px;
+      }
+
+      .chat-header {
+        align-items: flex-start;
+        padding: 16px;
+      }
+
+      .status {
+        display: none;
+      }
+
+      .messages {
+        padding: 18px 14px 8px;
+      }
+
+      .msg {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .typing-msg {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .avatar {
+        width: 42px;
+        height: 42px;
+      }
+
+      .avatar::before {
+        left: 14px;
+        top: 8px;
+        width: 14px;
+        height: 14px;
+        box-shadow: 0 16px 0 7px rgba(255, 230, 205, 0.62);
+      }
+
+      .bubble {
+        max-width: 100%;
+        padding: 13px 14px;
+      }
+
+      .bubble h2 {
+        font-size: 16px;
+      }
+
+      .bubble p {
+        font-size: 14.5px;
+      }
+
+      .chat-footer {
+        padding: 12px 14px;
+      }
+
+      .action {
+        display: none;
+      }
+
+      .credits {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="chat-shell" aria-label="虚拟智囊团聊天窗口">
+      <header class="chat-header">
+        <div class="room-title">
+          <div class="room-icon">AI</div>
+          <div>
+            <h1>一场关于唯品会是否上飞书的圆桌讨论</h1>
+            <p class="subtitle">把 IT 的真实顾虑抛出来，大家一起聊聊 AI 时代的组织协同底座。</p>
+          </div>
+        </div>
+        <div class="status">7 位成员在线讨论中</div>
+      </header>
+
+      <div class="messages" id="messages">
+        <article class="msg host" style="--i: 0; --avatar-bg: linear-gradient(135deg,#123945,#31dbc4);">
+          <div class="avatar" data-initial="主持"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>主持人</strong><span>19:30</span></div>
+            <div class="bubble">
+              <h2>今天不是说服唯品会上飞书，而是认真听懂唯品会 IT 部门的想法。</h2>
+              <p>我们刚和唯品会 IT 团队聊完，他们提出了很多专业顾虑：自研 IM 深度承载业务、迁移成本不低、现有系统可控、安全和数据边界必须谨慎，他们也已经在探索自己的 AI Agent 和 MCP 方案。</p>
+              <p>所以请各位从自己的经验出发，一起拆拆看：IT 的顾虑哪些该尊重？哪些可能低估了未来？飞书真正可能帮唯品会解决的，不是“换工具”，而是什么？</p>
+              <div class="tag-row">
+                <span class="tag">IM 深度耦合</span>
+                <span class="tag">迁移成本</span>
+                <span class="tag">自研可控</span>
+                <span class="tag">安全边界</span>
+                <span class="tag">Agent / MCP</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 1; --avatar-bg: linear-gradient(135deg,#153e52,#31dbc4);">
+          <div class="avatar photo" data-initial="Pony" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg/250px-%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>马化腾</strong><span>19:31</span></div>
+            <div class="bubble">
+              <h2>先尊重 IT 的谨慎，但别把耦合误认为稳定。</h2>
+              <p>IM 对一家业务和系统高度复杂的企业来说，不只是聊天软件，它往往长着审批、机器人、系统通知、业务协作，一旦深度耦合，迁移确实不能拍脑袋。</p>
+              <p>但业务长在 IM 上，不一定代表系统稳，也可能代表架构分层不够清楚。飞书不一定要一上来替换所有 IM，可以先从会议、文档、知识沉淀这些低风险高收益场景切进去。先让价值被看见，再谈更大范围迁移。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 2; --avatar-bg: linear-gradient(135deg,#183267,#4f8cff);">
+          <div class="avatar photo" data-initial="Byte" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/The_CEO_Magazine_Cover.jpg/250px-The_CEO_Magazine_Cover.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>张一鸣</strong><span>19:32</span></div>
+            <div class="bubble">
+              <h2>问题不是 IM，而是 AI 能不能消费企业上下文。</h2>
+              <p>IT 团队现在评估的是“飞书作为 IM，值不值得替换现有 IM”。但飞书真正的价值可能不是 IM，而是统一上下文。</p>
+              <p>消息、文档、会议、知识库、任务如果分散在不同系统里，AI 拿到的是碎片；如果沉淀在统一底座里，AI 才能理解组织正在发生什么。唯品会如果要做 AI，不只是要有模型和 Agent，还要有可被 AI 消费的企业上下文。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 3; --avatar-bg: linear-gradient(135deg,#572031,#ff6d7e);">
+          <div class="avatar photo" data-initial="Elon" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg/250px-Elon_Musk_Royal_Society_%28crop2%29.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>马斯克</strong><span>19:33</span></div>
+            <div class="bubble">
+              <h2>别只保护系统，要回到知识流动效率。</h2>
+              <p>我会问一个第一性原理问题：唯品会未来真正要优化的是什么？不是某个系统成本，而是组织决策速度、知识流动速度、业务创新速度。</p>
+              <p>自研可控很重要，但自研也会带来惯性。安全、迁移、可控都可以通过 POC 验证；但如果因为这些问题，完全不去验证新的协同范式，那风险反而更大。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 4; --avatar-bg: linear-gradient(135deg,#3d3644,#ffbd66);">
+          <div class="avatar photo" data-initial="Jobs" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Steve_Jobs.jpg/250px-Steve_Jobs.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>乔布斯</strong><span>19:34</span></div>
+            <div class="bubble">
+              <h2>员工不是抗拒变化，而是还没看到更好的体验。</h2>
+              <p>好的工具不是让人学习更多按钮，而是让工作自然发生：一次会议自动变成纪要和任务，一段讨论自然沉淀成知识，一个业务问题能被上下文直接回答。</p>
+              <p>如果飞书只是“另一个软件”，那没必要换；但如果它让唯品会的人少开会、少找资料、少在系统之间切换，那它就不是工具替换，而是体验升级。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 5; --avatar-bg: linear-gradient(135deg,#3f2c19,#7cde8a);">
+          <div class="avatar photo" data-initial="Jack" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Jack_Ma%2C_2015_%28cropped%29.jpg/250px-Jack_Ma%2C_2015_%28cropped%29.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>马云</strong><span>19:35</span></div>
+            <div class="bubble">
+              <h2>迁移成本要算，不变的成本也要算。</h2>
+              <p>IT 算迁移成本是应该的，但公司管理层还要算另一笔账：不变的成本。很多企业当年上云，也觉得自建机房安全、可控、便宜。但后来真正拉开差距的，不是省了多少服务器钱，而是谁更快获得弹性、更快试错、更快创新。</p>
+              <p>唯品会今天讨论飞书，也不只是办公工具，而是 AI 时代组织能力怎么升级。管理层要看的不是“换不换 IM”，而是“这件事会不会让唯品会跑得更快”。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg" style="--i: 6; --avatar-bg: linear-gradient(135deg,#2b2469,#a18aff);">
+          <div class="avatar photo" data-initial="Jensen" style="--photo: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Jensen_Huang_%28cropped%29.jpg/250px-Jensen_Huang_%28cropped%29.jpg'); --photo-pos: center top;"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>黄仁勋</strong><span>19:36</span></div>
+            <div class="bubble">
+              <h2>Agent 需要统一底座，不只是管道拼接。</h2>
+              <p>从 AI 基础设施角度看，Agent 不是孤立存在的。它需要数据、权限、上下文、工作流和反馈闭环。</p>
+              <p>MCP、OpenClaw、自研 Agent 当然可以做，但如果底层知识分散在多个系统里，Agent 每次都要跨系统拼上下文，效率和效果都会受影响。飞书如果能成为企业协同的统一上下文层，AI 能力才会越用越强。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="msg host" style="--i: 7; --avatar-bg: linear-gradient(135deg,#123945,#31dbc4);">
+          <div class="avatar" data-initial="总结"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong>主持人</strong><span>19:37</span></div>
+            <div class="bubble">
+              <h2>所以，不是要否定 IT，而是把问题往上提一层。</h2>
+              <p>IT 看到的是系统迁移风险，公司管理层需要看到的是组织升级机会。短期看，飞书不应被包装成“替换唯秘 / 替换 IM”；更合理的切入是：围绕唯品会真实业务，选几个低风险、高价值的场景做样板间。</p>
+              <p>如果样板间跑不出价值，那就说明飞书不该硬推；但如果跑出了价值，唯品会看到的就不是一个工具，而是一套 AI 时代组织协同的新底座。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="typing-msg" id="typingMsg" style="--avatar-bg: linear-gradient(135deg,#123945,#31dbc4);">
+          <div class="avatar" id="typingAvatar" data-initial="输入"></div>
+          <div class="bubble-wrap">
+            <div class="speaker"><strong id="typingSpeaker">主持人</strong><span>正在输入</span></div>
+            <div class="typing-bubble">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span id="typingInChat">主持人正在输入...</span>
+              <b class="countdown" id="chatCountdown">5s</b>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <footer class="chat-footer">
+        <div class="input-fake">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="typing-text">智囊团正在等待下一轮问题...</span>
+          <b class="countdown" id="countdown">5s</b>
+        </div>
+        <button class="action" type="button" id="replay">重新播放动画</button>
+        <details class="credits">
+          <summary>图片来源</summary>
+          <div>
+            头像来自 Wikimedia Commons：
+            <a href="https://commons.wikimedia.org/wiki/File:%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg">Pony Ma</a>、
+            <a href="https://commons.wikimedia.org/wiki/File:The_CEO_Magazine_Cover.jpg">Zhang Yiming</a>、
+            <a href="https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society_(crop2).jpg">Elon Musk</a>、
+            <a href="https://commons.wikimedia.org/wiki/File:Steve_Jobs.jpg">Steve Jobs</a>、
+            <a href="https://commons.wikimedia.org/wiki/File:Jack_Ma,_2015_(cropped).jpg">Jack Ma</a>、
+            <a href="https://commons.wikimedia.org/wiki/File:Jensen_Huang_(cropped).jpg">Jensen Huang</a>。
+          </div>
+        </details>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    const replay = document.getElementById("replay");
+    const messages = document.getElementById("messages");
+
+    const messageList = [...document.querySelectorAll(".msg")];
+    const inputFake = document.querySelector(".typing-text");
+    const inputBox = document.querySelector(".input-fake");
+    const countdown = document.getElementById("countdown");
+    const chatCountdown = document.getElementById("chatCountdown");
+    const typingMsg = document.getElementById("typingMsg");
+    const typingSpeaker = document.getElementById("typingSpeaker");
+    const typingInChat = document.getElementById("typingInChat");
+    const typingAvatar = document.getElementById("typingAvatar");
+    const delayMap = [200, 5000, 5000, 5000, 5000, 5000, 5000, 5000];
+    let timers = [];
+    let countdownTimer = null;
+
+    const speakerProfiles = {
+      "主持人": { initial: "主持", bg: "linear-gradient(135deg,#123945,#31dbc4)" },
+      "马化腾": { initial: "Pony", bg: "linear-gradient(135deg,#153e52,#31dbc4)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg/250px-%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg')" },
+      "张一鸣": { initial: "Byte", bg: "linear-gradient(135deg,#183267,#4f8cff)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/The_CEO_Magazine_Cover.jpg/250px-The_CEO_Magazine_Cover.jpg')" },
+      "马斯克": { initial: "Elon", bg: "linear-gradient(135deg,#572031,#ff6d7e)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg/250px-Elon_Musk_Royal_Society_%28crop2%29.jpg')" },
+      "乔布斯": { initial: "Jobs", bg: "linear-gradient(135deg,#3d3644,#ffbd66)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Steve_Jobs.jpg/250px-Steve_Jobs.jpg')" },
+      "马云": { initial: "Jack", bg: "linear-gradient(135deg,#3f2c19,#7cde8a)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Jack_Ma%2C_2015_%28cropped%29.jpg/250px-Jack_Ma%2C_2015_%28cropped%29.jpg')" },
+      "黄仁勋": { initial: "Jensen", bg: "linear-gradient(135deg,#2b2469,#a18aff)", photo: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Jensen_Huang_%28cropped%29.jpg/250px-Jensen_Huang_%28cropped%29.jpg')" }
+    };
+
+    function clearTimers() {
+      timers.forEach(timer => clearTimeout(timer));
+      timers = [];
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+
+    function startCountdown(seconds) {
+      if (countdownTimer) clearInterval(countdownTimer);
+      let remaining = seconds;
+      countdown.textContent = `${remaining}s`;
+      chatCountdown.textContent = `${remaining}s`;
+      countdownTimer = setInterval(() => {
+        remaining -= 1;
+        countdown.textContent = `${Math.max(remaining, 0)}s`;
+        chatCountdown.textContent = `${Math.max(remaining, 0)}s`;
+        if (remaining <= 0) {
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+        }
+      }, 1000);
+    }
+
+    function showTyping(name) {
+      const profile = speakerProfiles[name] || speakerProfiles["主持人"];
+      typingSpeaker.textContent = name;
+      typingInChat.textContent = `${name}正在输入...`;
+      typingAvatar.dataset.initial = profile.initial;
+      typingMsg.style.setProperty("--avatar-bg", profile.bg);
+      if (profile.photo) {
+        typingAvatar.classList.add("photo");
+        typingAvatar.style.setProperty("--photo", profile.photo);
+        typingAvatar.style.setProperty("--photo-pos", "center top");
+      } else {
+        typingAvatar.classList.remove("photo");
+        typingAvatar.style.removeProperty("--photo");
+        typingAvatar.style.removeProperty("--photo-pos");
+      }
+      typingMsg.classList.add("visible");
+      inputFake.textContent = `${name}正在输入...`;
+      messages.scrollTo({ top: messages.scrollHeight, behavior: "smooth" });
+    }
+
+    function hideTyping() {
+      typingMsg.classList.remove("visible");
+    }
+
+    function resetMessages() {
+      clearTimers();
+      messageList.forEach(msg => {
+        msg.classList.remove("visible");
+        msg.style.animation = "none";
+        msg.offsetHeight;
+        msg.style.animation = "";
+      });
+      inputBox.classList.remove("done");
+      inputFake.textContent = "主持人即将发言...";
+      countdown.textContent = "5s";
+      chatCountdown.textContent = "5s";
+      hideTyping();
+      messages.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    function playMessages() {
+      resetMessages();
+      let elapsed = 0;
+      messageList.forEach((msg, index) => {
+        elapsed += delayMap[index] || 5000;
+        timers.push(setTimeout(() => {
+          hideTyping();
+          msg.classList.add("visible");
+          const speaker = msg.querySelector(".speaker strong")?.textContent || "智囊团";
+          const next = messageList[index + 1]?.querySelector(".speaker strong")?.textContent;
+          inputFake.textContent = next ? `${next}正在输入...` : "讨论已整理完成";
+          if (!next) {
+            inputBox.classList.add("done");
+            if (countdownTimer) clearInterval(countdownTimer);
+            countdownTimer = null;
+          } else {
+            showTyping(next);
+            startCountdown(5);
+          }
+          messages.scrollTo({ top: messages.scrollHeight, behavior: "smooth" });
+        }, elapsed));
+      });
+    }
+
+    replay.addEventListener("click", playMessages);
+    window.addEventListener("load", playMessages);
+  </script>
+</body>
+</html>
