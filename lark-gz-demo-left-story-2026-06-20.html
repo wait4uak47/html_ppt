@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="fs-deck-generator" content="render-deck">
-  <meta name="fs-deck-hash" content="92a294b114fe">
-  <meta name="fs-render-sig" content="5344671e37d0a79d">
+  <meta name="fs-deck-hash" content="4e466df02be6">
+  <meta name="fs-render-sig" content="b9e93df49a7cb469">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="fs-deck-mode" content="inline">
   <meta name="fs-language" content="zh-only">
@@ -5537,7 +5537,7 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
   </style>
 </head>
 <body>
-  <div class="deck" data-deck-id="dk-c78ef9c08625">
+  <div class="deck" data-deck-id="dk-edeba0e1d243">
     <div class="slide-frame">
       <div class="slide" data-layout="section" data-accent="teal" data-screen-label="场景一：玩具反斗城跨国选品会" data-slide-key="scene-one-toys-r-us">
         <style data-slide-key="scene-one-toys-r-us" data-fs-custom-css>
@@ -6121,12 +6121,6 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
-  .slide-frame.is-current .slide[data-slide-key="ai-solution-scenario-map"] .scenario-demo-trigger {
-    animation-name: gz-ai-solution-scenario-map-trigger-cycle;
-    animation-duration: 16s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
   .slide-frame.is-current .slide[data-slide-key="ai-solution-scenario-map"] .scenario-chat {
     animation-name: gz-ai-solution-scenario-map-chat-cycle;
     animation-duration: 16s;
@@ -6138,6 +6132,20 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
     animation-duration: 16s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+  }
+  .slide-frame.is-current .slide[data-slide-key="ai-solution-scenario-map"] .scenario-result::after {
+    animation-name: gz-ai-solution-scenario-map-result-sheen-cycle;
+    animation-duration: 16s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-delay: inherit;
+  }
+  .slide-frame.is-current .slide[data-slide-key="ai-solution-scenario-map"] .scenario-result strong {
+    animation-name: gz-ai-solution-scenario-map-result-text-cycle;
+    animation-duration: 16s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-delay: inherit;
   }
 }
 
@@ -6174,6 +6182,7 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
 .slide[data-slide-key="ai-solution-scenario-map"] .scenario-demo-card {
   position:relative;
   border:1px solid rgba(255,255,255,.16);
+  border-top-color:var(--accent);
   border-radius:24px;
   background:linear-gradient(180deg,rgba(11,24,48,.62),rgba(6,14,28,.52));
   padding:18px;
@@ -6184,16 +6193,6 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
   min-height:0;
   overflow:hidden;
   opacity:.68;
-}
-.slide[data-slide-key="ai-solution-scenario-map"] .scenario-demo-card::before {
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  top:0;
-  height:3px;
-  background:var(--accent);
-  opacity:.36;
 }
 .slide[data-slide-key="ai-solution-scenario-map"] .scenario-card-head {
   display:flex;
@@ -6244,26 +6243,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
   line-height:1;
   font-weight:900;
 }
-.slide[data-slide-key="ai-solution-scenario-map"] .scenario-demo-trigger {
-  height:42px;
-  border:1px solid rgba(124,167,255,.42);
-  border-radius:10px;
-  background:rgba(74,124,255,.12);
-  color:rgba(255,255,255,.82);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  line-height:1;
-  font-weight:900;
-  margin-top:14px;
-}
 .slide[data-slide-key="ai-solution-scenario-map"] .scenario-dialog {
   border:1px solid rgba(255,255,255,.12);
   border-radius:16px;
   background:rgba(255,255,255,.035);
-  margin-top:12px;
-  padding:12px;
+  margin-top:20px;
+  padding:14px;
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -6316,46 +6301,58 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
   color:#53e8ca;
 }
 .slide[data-slide-key="ai-solution-scenario-map"] .scenario-result {
-  border:1px solid rgba(83,232,202,.30);
-  border-radius:14px;
-  background:rgba(83,232,202,.08);
+  border:1px solid rgba(83,232,202,.36);
+  border-radius:18px;
+  background:linear-gradient(90deg,rgba(83,232,202,.10),rgba(74,124,255,.08));
   color:#fff;
-  font-size:24px;
-  line-height:1.18;
-  font-weight:900;
-  padding:12px 14px;
-  margin-top:14px;
-  min-height:54px;
+  padding:16px 15px;
+  margin-top:18px;
+  min-height:88px;
   display:flex;
+  justify-content:center;
   align-items:center;
-  opacity:.42;
+  opacity:.56;
+  position:relative;
+  overflow:hidden;
+  transform-origin:center;
+}
+.slide[data-slide-key="ai-solution-scenario-map"] .scenario-result::after {
+  content:"";
+  position:absolute;
+  top:-40%;
+  bottom:-40%;
+  width:42%;
+  left:-52%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.46),transparent);
+  transform:skewX(-18deg);
+  opacity:0;
+  pointer-events:none;
+}
+.slide[data-slide-key="ai-solution-scenario-map"] .scenario-result strong {
+  color:#fff;
+  font-size:28px;
+  line-height:1.08;
+  font-weight:900;
+  letter-spacing:0;
+  white-space:nowrap;
+  position:relative;
+  z-index:1;
+  text-align:center;
 }
 @keyframes gz-ai-solution-scenario-map-card-cycle {
-  0%, 18% {
+  0%, 20% {
     opacity:1;
     transform:translateY(-4px);
     border-color:rgba(83,232,202,.64);
     box-shadow:0 0 0 1px rgba(83,232,202,.18), 0 18px 42px rgba(0,0,0,.28);
     background:linear-gradient(180deg,rgba(15,40,62,.78),rgba(6,22,35,.68));
   }
-  22%, 100% {
+  23%, 100% {
     opacity:.68;
     transform:none;
     border-color:rgba(255,255,255,.16);
     box-shadow:none;
     background:linear-gradient(180deg,rgba(11,24,48,.62),rgba(6,14,28,.52));
-  }
-}
-@keyframes gz-ai-solution-scenario-map-trigger-cycle {
-  0%, 18% {
-    background:rgba(83,232,202,.14);
-    border-color:rgba(83,232,202,.42);
-    color:#53e8ca;
-  }
-  22%, 100% {
-    background:rgba(74,124,255,.12);
-    border-color:rgba(124,167,255,.42);
-    color:rgba(255,255,255,.82);
   }
 }
 @keyframes gz-ai-solution-scenario-map-chat-cycle {
@@ -6367,25 +6364,60 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
     opacity:1;
     transform:none;
   }
-  22%, 100% {
+  23%, 100% {
     opacity:.22;
     transform:none;
   }
 }
 @keyframes gz-ai-solution-scenario-map-result-cycle {
-  0%, 10% {
-    opacity:.42;
+  0%, 11% {
+    opacity:.34;
     transform:none;
   }
-  13%, 18% {
+  13%, 20% {
     opacity:1;
-    border-color:rgba(83,232,202,.58);
-    box-shadow:0 0 24px rgba(83,232,202,.12);
+    transform:translateY(-8px) scale(1.07);
+    border-color:var(--accent);
+    background:linear-gradient(90deg,rgba(83,232,202,.38),rgba(74,124,255,.32));
+    box-shadow:0 0 0 2px rgba(83,232,202,.26), 0 0 44px rgba(83,232,202,.28), inset 0 0 26px rgba(255,255,255,.08);
   }
-  22%, 100% {
-    opacity:.42;
-    border-color:rgba(83,232,202,.30);
+  23%, 100% {
+    opacity:.56;
+    transform:none;
+    border-color:rgba(83,232,202,.36);
+    background:linear-gradient(90deg,rgba(83,232,202,.10),rgba(74,124,255,.08));
     box-shadow:none;
+  }
+}
+@keyframes gz-ai-solution-scenario-map-result-text-cycle {
+  0%, 11% {
+    color:rgba(255,255,255,.72);
+    transform:none;
+    text-shadow:none;
+  }
+  13%, 20% {
+    color:#fff;
+    transform:scale(1.16);
+    text-shadow:0 0 20px rgba(255,255,255,.35), 0 0 32px rgba(83,232,202,.34);
+  }
+  23%, 100% {
+    color:#fff;
+    transform:none;
+    text-shadow:none;
+  }
+}
+@keyframes gz-ai-solution-scenario-map-result-sheen-cycle {
+  0%, 12% {
+    opacity:0;
+    left:-52%;
+  }
+  14%, 18% {
+    opacity:.92;
+    left:105%;
+  }
+  21%, 100% {
+    opacity:0;
+    left:105%;
   }
 }
 
@@ -6411,13 +6443,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
         <div class="scenario-title">生产异常上报</div>
         <div class="scenario-keyword">快</div>
       </div>
-      <div class="scenario-demo-trigger" style="animation-delay:0s;">场景演示</div>
       <div class="scenario-dialog">
         <div class="scenario-chat scenario-user" style="animation-delay:0.25s;"><span>一线</span>设备报警停机</div>
         <div class="scenario-chat scenario-ai" style="animation-delay:0.70s;"><span>AI</span>追问批次工件</div>
         <div class="scenario-chat scenario-flow" style="animation-delay:1.15s;"><span>流程</span>入表通知专家</div>
       </div>
-      <div class="scenario-result" style="animation-delay:1.65s;">小时级到分钟级</div>
+      <div class="scenario-result" style="animation-delay:0s;"><strong>小时级到分钟级</strong></div>
     </div>
   
           
@@ -6430,13 +6461,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
         <div class="scenario-title">供应商质量问题</div>
         <div class="scenario-keyword">准</div>
       </div>
-      <div class="scenario-demo-trigger" style="animation-delay:3.2s;">场景演示</div>
       <div class="scenario-dialog">
         <div class="scenario-chat scenario-user" style="animation-delay:3.45s;"><span>一线</span>批次外壳划伤</div>
         <div class="scenario-chat scenario-ai" style="animation-delay:3.90s;"><span>AI</span>识别供应商订单</div>
         <div class="scenario-chat scenario-flow" style="animation-delay:4.35s;"><span>流程</span>更新扣分流程</div>
       </div>
-      <div class="scenario-result" style="animation-delay:4.85s;">分级自动更新</div>
+      <div class="scenario-result" style="animation-delay:3.2s;"><strong>分级自动更新</strong></div>
     </div>
   
           
@@ -6449,13 +6479,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
         <div class="scenario-title">来料/首件检验</div>
         <div class="scenario-keyword">稳</div>
       </div>
-      <div class="scenario-demo-trigger" style="animation-delay:6.4s;">场景演示</div>
       <div class="scenario-dialog">
         <div class="scenario-chat scenario-user" style="animation-delay:6.65s;"><span>一线</span>抽检尺寸超差</div>
         <div class="scenario-chat scenario-ai" style="animation-delay:7.10s;"><span>AI</span>匹配检验规则</div>
         <div class="scenario-chat scenario-flow" style="animation-delay:7.55s;"><span>流程</span>推送质量判定</div>
       </div>
-      <div class="scenario-result" style="animation-delay:8.05s;">规则可配置</div>
+      <div class="scenario-result" style="animation-delay:6.4s;"><strong>规则可配置</strong></div>
     </div>
   
           
@@ -6468,13 +6497,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
         <div class="scenario-title">客户投诉退换货</div>
         <div class="scenario-keyword">值</div>
       </div>
-      <div class="scenario-demo-trigger" style="animation-delay:9.600000000000001s;">场景演示</div>
       <div class="scenario-dialog">
         <div class="scenario-chat scenario-user" style="animation-delay:9.85s;"><span>一线</span>高价值客户投诉</div>
         <div class="scenario-chat scenario-ai" style="animation-delay:10.30s;"><span>AI</span>识别 LTV 状态</div>
         <div class="scenario-chat scenario-flow" style="animation-delay:10.75s;"><span>流程</span>升级主管财务</div>
       </div>
-      <div class="scenario-result" style="animation-delay:11.25s;">按价值分级处理</div>
+      <div class="scenario-result" style="animation-delay:9.600000000000001s;"><strong>按价值分级处理</strong></div>
     </div>
   
           
@@ -6487,13 +6515,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
         <div class="scenario-title">销售线索登记</div>
         <div class="scenario-keyword">赢</div>
       </div>
-      <div class="scenario-demo-trigger" style="animation-delay:12.8s;">场景演示</div>
       <div class="scenario-dialog">
         <div class="scenario-chat scenario-user" style="animation-delay:13.05s;"><span>一线</span>海外月需 5000 件</div>
         <div class="scenario-chat scenario-ai" style="animation-delay:13.50s;"><span>AI</span>线索评分 85 分</div>
         <div class="scenario-chat scenario-flow" style="animation-delay:13.95s;"><span>流程</span>分配 SDR 跟进</div>
       </div>
-      <div class="scenario-result" style="animation-delay:14.45s;">转化提升 20%</div>
+      <div class="scenario-result" style="animation-delay:12.8s;"><strong>转化提升 20%</strong></div>
     </div>
   
         </div>
