@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="fs-deck-generator" content="render-deck">
-  <meta name="fs-deck-hash" content="5e806945c8d5">
-  <meta name="fs-render-sig" content="99942f908c7edb36">
+  <meta name="fs-deck-hash" content="d1ac1b1c8aae">
+  <meta name="fs-render-sig" content="c8be14faa52262a2">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="fs-language" content="zh-only">
   <title>广州 Demo · 现场业务与 Agent 协作 · 飞书</title>
@@ -8724,158 +8724,12 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
 }
 /* /p11 title alignment */
 
-/* p11 mini whiteboard */
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-stage {
-  top: 228px !important;
-  bottom: 48px !important;
-  display: grid !important;
-  grid-template-rows: 456px 190px;
-  gap: 26px !important;
-  align-content: start;
-  padding-top: 0 !important;
-  box-sizing: border-box;
-  transform: translateY(72px);
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-stage .fsx-lane {
-  min-height: 0 !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
-  gap: 18px !important;
-  align-items: stretch;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-stage .p11-card {
-  min-height: 0 !important;
-  padding: 40px 38px !important;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-zone {
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 24px;
-  padding: 22px 24px;
-  border-radius: 8px;
-  border: 1px solid rgba(83, 232, 202, .28);
-  background: linear-gradient(90deg, rgba(83, 232, 202, .10), rgba(74, 124, 255, .07));
-  box-shadow: 0 18px 44px rgba(0, 0, 0, .20);
-  overflow: hidden;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-copy {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-copy h3 {
-  margin: 0;
-  color: #53e8ca;
-  font: 900 28px/1.2 var(--fs-font-cjk);
-  letter-spacing: 0;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-copy p {
-  margin: 0;
-  color: rgba(248, 251, 255, .86);
-  font: 700 24px/1.5 var(--fs-font-cjk);
-  letter-spacing: 0;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-whiteboard {
-  position: relative;
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 42px;
-  align-items: center;
-  padding: 26px 30px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, .12);
-  background:
-    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
-    rgba(6, 14, 28, .42);
-  background-size: 36px 36px;
-  overflow: hidden;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-lines {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-lines .main-line {
-  fill: none;
-  stroke: rgba(83, 232, 202, .72);
-  stroke-width: 1.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  marker-end: url(#p11-arrow);
-  filter: drop-shadow(0 0 10px rgba(83, 232, 202, .20));
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-lines marker path {
-  fill: rgba(83, 232, 202, .80);
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node {
-  position: relative;
-  z-index: 2;
-  min-width: 0;
-  min-height: 104px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  padding: 18px 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, .16);
-  background: rgba(11, 24, 48, .88);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node span {
-  color: #53e8ca;
-  font: 900 28px/1.15 var(--fs-font-cjk);
-  letter-spacing: 0;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node b {
-  color: rgba(235, 242, 255, .82);
-  font: 700 24px/1.5 var(--fs-font-cjk);
-  letter-spacing: 0;
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node.n-agent {
-  border-color: rgba(83, 232, 202, .42);
-  background: rgba(83, 232, 202, .12);
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node.n-govern {
-  border-color: rgba(124, 93, 255, .38);
-  background: rgba(124, 93, 255, .12);
-}
-
-.slide[data-slide-key="p11-agent-coordinate-shift"] .p11-board-node.n-govern span {
-  color: #d6c9ff;
-}
-/* /p11 mini whiteboard */
 
         </style>
         <div class="wordmark">飞书</div>
 <div class="header"><h2 class="title-zh">软件正在换一套坐标系</h2><p class="page-sub">人在提需求、做判断，Agent 在跑流程、出结果</p></div>
 
-<div class="stage fsx-stage stage--tall p11-stage">
+<div class="stage fsx-stage stage--tall">
   <div class="fsx-lane">
     <div class="fsx-card p11-card">
       <div class="fsx-titleline p11-titleline">
@@ -8893,41 +8747,9 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
       <p>多了一类新用户 —— Agent。它要读上下文、调工具、进流程，也要被权限与审计管住。</p>
     </div>
   </div>
-  <section class="p11-board-zone" aria-label="Agent 协作小画板">
-    <div class="p11-board-copy">
-      <h3>小画板</h3>
-      <p>系统不能只让人好用，还得让 Agent 能干活。</p>
-    </div>
-    <div class="p11-whiteboard">
-      <svg class="p11-board-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <marker id="p11-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z"></path>
-          </marker>
-        </defs>
-        <path class="main-line" d="M22 50 L30 50"></path>
-        <path class="main-line" d="M47 50 L55 50"></path>
-        <path class="main-line" d="M72 50 L80 50"></path>
-      </svg>
-      <div class="p11-board-node n-human">
-        <span>人</span>
-        <b>提需求 / 做判断</b>
-      </div>
-      <div class="p11-board-node n-agent">
-        <span>Agent</span>
-        <b>读上下文 / 跑流程</b>
-      </div>
-      <div class="p11-board-node n-tool">
-        <span>工具</span>
-        <b>执行动作 / 出结果</b>
-      </div>
-      <div class="p11-board-node n-govern">
-        <span>治理</span>
-        <b>权限 / 审计</b>
-      </div>
-    </div>
-  </section>
+  <div class="fsx-thesis">系统不能只让人好用，还得让 Agent 能干活。</div>
 </div>
+
 
       </div>
     </div>
@@ -10093,6 +9915,19 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
       goTo(deck, frames, next);
     }, { signal, passive: true });
 
+    // ---- PPT-style click nav (present mode) ----
+    // In live demo mode the deck should feel like a PPT: one normal click
+    // advances one slide. Interactive controls, links, media and editable
+    // regions opt out so they keep their own click behavior.
+    deck.addEventListener('click', (e) => {
+      if (deck.dataset.mode !== 'present') return;
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      if (isClickNavExcluded(e.target)) return;
+      const cur = currentIdx(frames);
+      const next = stepNext(frames, cur);
+      if (next !== cur) goTo(deck, frames, next);
+    }, { signal });
+
     // ---- Hash sync — #3 (1-based slide index) OR #<slide-key>
     // (data-slide-key slug, e.g. #cover / #cup-journey). Slug form is
     // how the slide-library viewer deep-links into a specific slide.
@@ -10772,6 +10607,16 @@ body.deck-edit-mode .deck[data-mode="scroll"] {
     if (target.isContentEditable) return true;
     const tag = target.tagName;
     return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+  }
+
+  function isClickNavExcluded(target) {
+    if (!target || !(target instanceof Element)) return false;
+    if (isTypingTarget(target)) return true;
+    return !!target.closest(
+      'a,button,label,summary,iframe,video,audio,canvas,' +
+      '[contenteditable],[role="button"],[role="link"],' +
+      '[data-no-slide-click],.deck-ui,.fs-mobile-back,.fs-mobile-pageno'
+    );
   }
 
   function maybePortraitToast() {
